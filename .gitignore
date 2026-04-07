@@ -1,3 +1,10 @@
 .planning/
 .claude/
 .vscode/
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.log
+*.tsbuildinfo
