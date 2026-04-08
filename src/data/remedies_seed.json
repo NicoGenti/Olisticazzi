@@ -1,0 +1,134 @@
+[
+  {
+    "id": "remedy-001",
+    "text": "Trova un luogo tranquillo e siediti con il tuo respiro per cinque minuti. Osserva i pensieri senza giudicarli, come nuvole che passano in un cielo immobile.",
+    "linkedCardId": "card-001",
+    "category": "meditazione"
+  },
+  {
+    "id": "remedy-002",
+    "text": "Esci fuori, anche solo per pochi minuti, e trova un corpo d'acqua — uno stagno, una fontana, anche una pozzanghera. Guardalo senza fare nulla: lascia che la quiete ti raggiunga.",
+    "linkedCardId": "card-002",
+    "category": "natura"
+  },
+  {
+    "id": "remedy-003",
+    "text": "Prendi un foglio e scrivi tre cose che ti spaventano oggi, poi accanto a ciascuna scrivi un piccolo passo coraggioso che potresti fare. Non serve compierlo — solo vederlo scritto cambia qualcosa.",
+    "linkedCardId": "card-003",
+    "category": "scrittura"
+  },
+  {
+    "id": "remedy-004",
+    "text": "Siediti a terra, schiena dritta, e posa le mani sulle cosce. Respira lentamente portando l'attenzione al contatto tra il corpo e il suolo sotto di te. Senti il tuo peso — è il peso di chi è ancora qui.",
+    "linkedCardId": "card-004",
+    "category": "respiro"
+  },
+  {
+    "id": "remedy-005",
+    "text": "Prima di dormire, scrivi nel tuo diario un sogno che vorresti fare — non di notte, ma nella vita. Lascia che le parole vengano senza censura, nel buio protetto della sera.",
+    "linkedCardId": "card-005",
+    "category": "scrittura"
+  },
+  {
+    "id": "remedy-006",
+    "text": "Fai una passeggiata al mattino presto, quando la luce è ancora tenera. Cammina senza destinazione, lasciando che i tuoi piedi decidano il percorso. Nota cosa si muove in te con ogni passo.",
+    "linkedCardId": "card-006",
+    "category": "movimento"
+  },
+  {
+    "id": "remedy-007",
+    "text": "Scrivi le opzioni che senti davanti a te, anche quelle che sembrano impossibili. Poi allontana il foglio e chiedi al tuo corpo: quale scelta mi fa respirare più liberamente? Fidati di quella risposta.",
+    "linkedCardId": "card-007",
+    "category": "scrittura"
+  },
+  {
+    "id": "remedy-008",
+    "text": "Porta una mano al petto e respira lentamente tre volte, sentendo il calore della tua stessa mano. Poi dì piano: 'Sono abbastanza coraggioso anche così.' Non serve crederci subito — basta dirlo.",
+    "linkedCardId": "card-008",
+    "category": "respiro"
+  },
+  {
+    "id": "remedy-009",
+    "text": "Pensa a qualcuno che ami e scrivi loro un messaggio breve e sincero — non per spiegare, solo per dire che ci sei. La connessione si nutre di piccoli gesti veri.",
+    "linkedCardId": "card-009",
+    "category": "scrittura"
+  },
+  {
+    "id": "remedy-010",
+    "text": "Fai cinque respiri profondi: inspira per quattro tempi, tieni per quattro, espira per sei. Mentre respiri, immagina di trovare il tuo centro — quel punto nel petto che non trema mai completamente.",
+    "linkedCardId": "card-010",
+    "category": "respiro"
+  },
+  {
+    "id": "remedy-011",
+    "text": "Siediti alla luce naturale e scrivi cinque cose per cui sei grato oggi — piccole, concrete, vere. Non serve che siano grandi: la gratitudine si nutre di dettagli.",
+    "linkedCardId": "card-011",
+    "category": "scrittura"
+  },
+  {
+    "id": "remedy-012",
+    "text": "Stenditi di notte fuori o vicino a una finestra aperta e guarda il cielo per qualche minuto. Lascia che la vastità ti faccia sentire piccolo nel modo migliore possibile: libero dal peso di dover capire tutto.",
+    "linkedCardId": "card-012",
+    "category": "natura"
+  },
+  {
+    "id": "remedy-013",
+    "text": "Sali su un punto alto — una collina, un tetto, un terrazzo — e guarda l'orizzonte. Lascia che la visione ampia ti raggiunga nel corpo, non solo negli occhi. Cos'è possibile da qui?",
+    "linkedCardId": "card-013",
+    "category": "natura"
+  },
+  {
+    "id": "remedy-014",
+    "text": "Metti della musica che ami e danza — anche solo per tre minuti, anche solo in cucina. Non importa come appari: lascia che il corpo esprima la gioia senza media, senza filtri.",
+    "linkedCardId": "card-014",
+    "category": "movimento"
+  },
+  {
+    "id": "remedy-015",
+    "text": "Siediti in silenzio e porta la tua attenzione a una parte di te che ti risulta difficile — un pensiero scomodo, una sensazione che eviti. Rimani con essa per due minuti senza cercare di cambiarla. Poi lasciala andare.",
+    "linkedCardId": "card-015",
+    "category": "meditazione"
+  },
+  {
+    "id": "remedy-016",
+    "text": "Scrivi su un foglio qualcosa che stai portando da troppo tempo — un pensiero, un risentimento, una speranza esaurita. Poi brucia il foglio (in sicurezza) o straccialo lentamente. Il gesto fisico aiuta il lasciar andare.",
+    "linkedCardId": "card-016",
+    "category": "scrittura"
+  },
+  {
+    "id": "remedy-017",
+    "text": "Fai una passeggiata lenta in un luogo naturale — un parco, un bosco, anche un giardino. Cammina senza meta e con gli occhi aperti ai dettagli piccoli: una foglia, un insetto, la luce attraverso i rami.",
+    "linkedCardId": "card-017",
+    "category": "natura"
+  },
+  {
+    "id": "remedy-018",
+    "text": "Porta entrambe le mani al viso, copriti gli occhi delicatamente e respira lentamente. Lascia che il buio protetto delle tue mani ti offra un momento di dolcezza verso te stesso. Non serve capire — serve solo stare.",
+    "linkedCardId": "card-018",
+    "category": "respiro"
+  },
+  {
+    "id": "remedy-019",
+    "text": "Siediti in un luogo tranquillo e porta la tua attenzione al cuore. Visualizza una luce bianca che si espande da quel centro con ogni respiro. Lascia che la purezza del momento ti raggiunga senza che tu debba guadagnartela.",
+    "linkedCardId": "card-019",
+    "category": "meditazione"
+  },
+  {
+    "id": "remedy-020",
+    "text": "Cammina in un posto che conosci bene — il tuo quartiere, un parco vicino. Cammina lentamente e cerca di notare qualcosa che non hai mai visto prima. La nostalgia si trasforma quando torni a essere curioso del presente.",
+    "linkedCardId": "card-020",
+    "category": "movimento"
+  },
+  {
+    "id": "remedy-021",
+    "text": "Fai un esercizio fisico che ti piaccia — corri, fai yoga, salta, balla. Mentre ti muovi, pensa a quanti prima di te hanno trovato forza nel movimento. Sei parte di qualcosa di più grande del tuo momento.",
+    "linkedCardId": "card-021",
+    "category": "movimento"
+  },
+  {
+    "id": "remedy-022",
+    "text": "Prenditi un momento per stare con la pienezza di oggi — senza rimpicciolirla, senza spostarla altrove. Porta una mano al petto e di': 'Sono grato per questo.' Poi respira e lascia che sia abbastanza.",
+    "linkedCardId": "card-022",
+    "category": "meditazione"
+  }
+]

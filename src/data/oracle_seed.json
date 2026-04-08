@@ -1,0 +1,179 @@
+[
+  {
+    "id": "card-001",
+    "name": "La Luna Velata",
+    "description": "Nel silenzio della notte, la luna si cela dietro i veli del cielo. È il momento di ascoltare ciò che si muove sotto la superficie, nel profondo dell'essere. Lascia che il buio diventi il tuo specchio.",
+    "moodRange": [0, 3],
+    "moonPhases": ["New Moon", "Waning Crescent"],
+    "tags": ["introspezione", "silenzio", "ombra"]
+  },
+  {
+    "id": "card-002",
+    "name": "Il Lago Quieto",
+    "description": "Uno specchio d'acqua immobile riflette il cielo senza giudizio. Dentro di te esiste la stessa quiete, anche quando non riesci a trovarla. Affidati alla pace che non ha bisogno di essere guadagnata.",
+    "moodRange": [0, 4],
+    "moonPhases": ["New Moon", "Waxing Crescent"],
+    "tags": ["riflessione", "pace", "accettazione"]
+  },
+  {
+    "id": "card-003",
+    "name": "Il Sentiero Nascosto",
+    "description": "Il cammino non è sempre visibile davanti a te, eppure i tuoi passi lo tracciano. Fidati del passo successivo, anche senza vedere la destinazione. Il coraggio non è assenza di paura, ma movimento nonostante essa.",
+    "moodRange": [1, 4],
+    "moonPhases": ["Waxing Crescent", "First Quarter"],
+    "tags": ["ricerca", "coraggio", "fluidità"]
+  },
+  {
+    "id": "card-004",
+    "name": "La Radice Profonda",
+    "description": "Quando il vento scuote i rami, le radici tengono. Scendi in te stesso fino a toccare la roccia su cui sei costruito — quella che non trema, quella che non mente. È lì che trovi la tua casa.",
+    "moodRange": [0, 3],
+    "moonPhases": ["Last Quarter", "Waning Crescent"],
+    "tags": ["radici", "vulnerabilità", "stabilità"]
+  },
+  {
+    "id": "card-005",
+    "name": "Il Fiore di Mezzanotte",
+    "description": "Alcuni fiori sbocciano solo di notte, quando il mondo dorme e nessuno li guarda. La tua sensibilità è così: un dono che fiorisce nell'oscurità, lontano dal rumore. Non aver fretta di portarla alla luce.",
+    "moodRange": [2, 5],
+    "moonPhases": ["New Moon", "Waxing Gibbous"],
+    "tags": ["sogno", "mistero", "dolcezza"]
+  },
+  {
+    "id": "card-006",
+    "name": "L'Alba Interiore",
+    "description": "Prima che la luce arrivi, c'è un momento di attesa — fragile, prezioso, pieno di possibilità. Sei all'alba di qualcosa di nuovo. Non tutto è ancora chiaro, ma il buio sta cedendo il passo.",
+    "moodRange": [3, 6],
+    "moonPhases": ["First Quarter", "Waxing Crescent"],
+    "tags": ["rinascita", "speranza", "sogno"]
+  },
+  {
+    "id": "card-007",
+    "name": "Il Crocevia",
+    "description": "Ti trovi a un incrocio, dove più strade si aprono davanti. Non scegliere con la testa sola — ascolta ciò che il corpo sa e la mente ancora non vede. Ogni scelta porta una propria luce.",
+    "moodRange": [3, 7],
+    "moonPhases": ["First Quarter", "Full Moon"],
+    "tags": ["scelta", "chiarezza", "coraggio"]
+  },
+  {
+    "id": "card-008",
+    "name": "La Fiamma Tremante",
+    "description": "La fiamma che trema non è spenta — lotta ancora. La tua forza non deve essere incrollabile per essere reale: essa vive proprio nel tremare e nel resistere. Onora la tua fragilità come una forma di coraggio.",
+    "moodRange": [2, 6],
+    "moonPhases": ["Waxing Crescent", "First Quarter"],
+    "tags": ["forza", "fragilità", "resilienza"]
+  },
+  {
+    "id": "card-009",
+    "name": "Il Ponte di Luce",
+    "description": "Tra te e ciò che ami esiste sempre un ponte, anche quando non lo vedi. È fatto di intenzione, di ascolto, di presenza. Avvicinati con delicatezza e il legame si farà strada.",
+    "moodRange": [4, 7],
+    "moonPhases": ["Waxing Gibbous", "Full Moon"],
+    "tags": ["connessione", "luce", "apertura"]
+  },
+  {
+    "id": "card-010",
+    "name": "L'Equilibrio dei Venti",
+    "description": "I venti soffiano da ogni direzione, eppure l'uccello trova il suo punto di equilibrio nel mezzo di essi. Sei capace di trovare il centro anche quando tutto intorno si muove. Respira e ricorda chi sei.",
+    "moodRange": [2, 8],
+    "moonPhases": ["Waxing Gibbous", "Waning Gibbous"],
+    "tags": ["equilibrio", "fluidità", "presenza"],
+    "isDefault": true
+  },
+  {
+    "id": "card-011",
+    "name": "La Piena Luna",
+    "description": "La luna piena illumina tutto ciò che di solito si nasconde nell'ombra. Non serve cercare — le risposte vengono da sé quando la luce è abbastanza forte. Lascia che la pienezza ti mostri la strada.",
+    "moodRange": [5, 8],
+    "moonPhases": ["Full Moon", "Waning Gibbous"],
+    "tags": ["pienezza", "gratitudine", "chiarezza"]
+  },
+  {
+    "id": "card-012",
+    "name": "Il Mantello di Stelle",
+    "description": "La notte stellata non è il vuoto — è un'abbondanza di luce distante. Ogni intuizione che ricevi è un filo di luce da una stella lontana: non razionale, non immediatamente comprensibile, ma reale. Fidati di ciò che senti senza capirlo.",
+    "moodRange": [5, 9],
+    "moonPhases": ["Full Moon", "Waxing Gibbous"],
+    "tags": ["meraviglia", "intuizione", "sogno"]
+  },
+  {
+    "id": "card-013",
+    "name": "Il Volo del Falco",
+    "description": "Dal cielo tutto sembra più piccolo, più gestibile, più chiaro. Il falco non si perde nei dettagli mentre vola — vede il disegno complessivo. Allarga la tua visione: cosa diventa possibile quando guardi dall'alto?",
+    "moodRange": [6, 10],
+    "moonPhases": ["Full Moon", "Waxing Gibbous"],
+    "tags": ["libertà", "visione", "chiarezza"]
+  },
+  {
+    "id": "card-014",
+    "name": "La Danza del Fuoco",
+    "description": "Il fuoco non si scusa per il suo ardore. Brucia, trasforma, illumina — è la sua natura. Oggi sei il fuoco, non la cenere. Abbraccia la tua intensità e lasciala danzare, libera e splendente.",
+    "moodRange": [7, 10],
+    "moonPhases": ["Full Moon", "Waning Gibbous"],
+    "tags": ["gioia", "trasformazione", "forza"]
+  },
+  {
+    "id": "card-015",
+    "name": "Il Sole nell'Ombra",
+    "description": "Anche la luce più brillante porta con sé un'ombra. Dentro la tua gioia c'è uno strato più profondo che aspetta di essere integrato. Non ignorarlo — è una parte di te che vuole essere riconosciuta e amata.",
+    "moodRange": [6, 9],
+    "moonPhases": ["Waning Gibbous", "Last Quarter"],
+    "tags": ["integrazione", "ombra", "profondità"]
+  },
+  {
+    "id": "card-016",
+    "name": "La Discesa Fertile",
+    "description": "Il seme non cresce verso l'alto finché non è disceso abbastanza in profondità. Questo momento di discesa non è perdita — è preparazione. Ciò che stai lasciando andare farà spazio a qualcosa di nuovo.",
+    "moodRange": [3, 6],
+    "moonPhases": ["Last Quarter", "Waning Crescent"],
+    "tags": ["lasciar andare", "liberazione", "trasformazione"]
+  },
+  {
+    "id": "card-017",
+    "name": "Il Tesoro Sommerso",
+    "description": "Sotto le acque torbide del momento, qualcosa di prezioso ti aspetta. Non è necessario affrettarsi a portarlo in superficie — la scoperta ha il suo ritmo. Fidati del processo, anche quando non vedi ancora il dono.",
+    "moodRange": [1, 5],
+    "moonPhases": ["Waning Crescent", "New Moon"],
+    "tags": ["scoperta", "profondità", "intuizione"]
+  },
+  {
+    "id": "card-018",
+    "name": "La Nebbia del Mattino",
+    "description": "La nebbia non nega il paesaggio — lo avvolge in un velo temporaneo. Non devi vedere tutto con chiarezza adesso. Cammina lentamente, con gentilezza verso te stesso, e la nebbia si dirada da sola.",
+    "moodRange": [0, 4],
+    "moonPhases": ["Waning Crescent", "New Moon"],
+    "tags": ["confusione", "dolcezza", "pazienza"]
+  },
+  {
+    "id": "card-019",
+    "name": "Il Cervo Bianco",
+    "description": "Il cervo bianco appare raramente, e sempre come messaggero di grazia. Sei in un momento di purezza interiore — quando le difese si abbassano e il cuore si lascia vedere così com'è. Accetta questo dono di apertura.",
+    "moodRange": [5, 8],
+    "moonPhases": ["Full Moon", "Last Quarter"],
+    "tags": ["grazia", "purezza", "apertura"]
+  },
+  {
+    "id": "card-020",
+    "name": "La Riva Lontana",
+    "description": "C'è una riva che vedi dall'altra parte del mare, e dentro di te sorge un desiderio antico. Non è malinconia — è il ricordo di ciò che sei chiamato a diventare. Il mare tra te e quella riva è il tuo cammino.",
+    "moodRange": [4, 8],
+    "moonPhases": ["Waning Gibbous", "Last Quarter"],
+    "tags": ["nostalgia", "connessione", "desiderio"]
+  },
+  {
+    "id": "card-021",
+    "name": "Il Tamburo Antico",
+    "description": "Il ritmo del tamburo risveglia qualcosa di ancestrale nel corpo — una memoria più antica delle parole. La tua forza non è solo tua: viene da tutti coloro che sono venuti prima di te e hanno tenuto duro. Attingi a quella fonte.",
+    "moodRange": [6, 10],
+    "moonPhases": ["Waxing Gibbous", "Full Moon"],
+    "tags": ["forza", "radici", "connessione"]
+  },
+  {
+    "id": "card-022",
+    "name": "L'Ultima Luce",
+    "description": "La luce che precede il tramonto è la più intensa e la più bella della giornata. Questo momento di pienezza non è la fine — è il culmine. Sii grato per l'intensità di ciò che senti: non tutti hanno il coraggio di sentire così tanto.",
+    "moodRange": [8, 10],
+    "moonPhases": ["Full Moon", "Waxing Gibbous"],
+    "tags": ["pienezza", "coraggio", "gratitudine"]
+  }
+]
