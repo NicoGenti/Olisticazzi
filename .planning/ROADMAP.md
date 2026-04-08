@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. The Moonmood boreale gradient theme (green, violet, blue, pink) is visible throughout the app
   5. All mood logs survive a full browser refresh (persisted in IndexedDB)
   6. Layout is responsive and usable on mobile screen sizes (≥320px width), with touch targets ≥ 44px
-**Plans**: 6 plans
+**Plans**: 7 plans
 
 Plans:
 - [x] 01-01-PLAN.md — Bootstrap Next.js 14 project with all Phase 1 dependencies
@@ -65,6 +65,7 @@ Plans:
 - [x] 02-04-PLAN.md — TDD: oracle selection engine + useOracleEngine hook
 - [x] 02-05-PLAN.md — Wire oracle into useDailySession + /oracle page + flip animation
 - [x] 02-06-PLAN.md — Human verification of complete Phase 2 oracle experience
+- [x] 02-07-PLAN.md — Close verification gap by defining ORCL/ASTR requirements in REQUIREMENTS.md
 
 ### Phase 3: Mood History
 **Goal**: Users can reflect on their emotional journey by browsing past logs and their oracle responses, all sourced from local IndexedDB
