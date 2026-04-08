@@ -59,7 +59,7 @@ Plans:
 **Plans**: 6 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Install astronomia + define oracle/astrology/mood types + Dexie v2
+- [x] 02-01-PLAN.md — Install astronomia + define oracle/astrology/mood types + Dexie v2
 - [ ] 02-02-PLAN.md — Author oracle seed data (22 cards + remedies + aphorisms in Italian)
 - [ ] 02-03-PLAN.md — TDD: lunar phase service (astronomia) + mood trend service
 - [ ] 02-04-PLAN.md — TDD: oracle selection engine + useOracleEngine hook
@@ -93,6 +93,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Mood Input | 6/6 | Complete   | 2026-04-07 |
-| 2. Oracle Response | 0/? | Not started | - |
+| 2. Oracle Response | 1/6 | In Progress|  |
 | 3. Mood History | 0/? | Not started | - |
 | 4. PWA Shell | 0/? | Not started | - |
