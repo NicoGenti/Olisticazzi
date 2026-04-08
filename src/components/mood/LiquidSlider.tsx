@@ -62,6 +62,15 @@ export function LiquidSlider({ value, onValueChange, className }: LiquidSliderPr
   const [maxDragX, setMaxDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [showHint, setShowHint] = useState<boolean>(() => {
+    try {
+      return typeof window !== "undefined"
+        ? localStorage.getItem("lslider-hint-seen") !== "1"
+        : false;
+    } catch {
+      return false;
+    }
+  });
   const [idleStep, setIdleStep] = useState(0);
   const [dragStep, setDragStep] = useState(0);
   const lastHapticScore = useRef<number>(-1);
@@ -201,6 +210,10 @@ export function LiquidSlider({ value, onValueChange, className }: LiquidSliderPr
         onDragStart={() => {
           setIsDragging(true);
           if (!hasInteracted) setHasInteracted(true);
+          if (showHint) {
+            setShowHint(false);
+            try { localStorage.setItem("lslider-hint-seen", "1"); } catch { /* ignore */ }
+          }
         }}
         onDrag={() => {
           setDragStep((current) => current + 1);
@@ -252,6 +265,22 @@ export function LiquidSlider({ value, onValueChange, className }: LiquidSliderPr
           />
         </svg>
       </motion.div>
+
+      {/* First-visit hint */}
+      <AnimatePresence>
+        {showHint && (
+          <motion.p
+            key="slider-hint"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 0.55, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.4 }}
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xs text-white/55 pointer-events-none select-none whitespace-nowrap"
+          >
+            ← scorri →
+          </motion.p>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
