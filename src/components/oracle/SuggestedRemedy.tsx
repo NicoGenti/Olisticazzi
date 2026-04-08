@@ -37,21 +37,35 @@ function SuggestedRemedyBase({ remedy, isVisible }: SuggestedRemedyProps) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 16 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-xs mx-auto bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 flex flex-col gap-3"
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="w-full mx-auto flex flex-col gap-3"
+      style={{
+        background: "var(--glass-bg-soft)",
+        border: "1px solid var(--glass-border-soft)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderRadius: "var(--radius-card)",
+        padding: "1.25rem",
+        maxWidth: "20rem",
+      }}
     >
       {/* Category label */}
       <div className="flex items-center gap-2">
         <span className="text-xl" aria-hidden="true">
           {icon}
         </span>
-        <span className="text-xs font-semibold text-white/50 uppercase tracking-widest">
+        <span
+          className="text-xs font-semibold uppercase tracking-widest"
+          style={{ color: "rgba(245,247,255,0.45)" }}
+        >
           {label}
         </span>
       </div>
 
       {/* Remedy text */}
-      <p className="text-sm text-white/85 leading-relaxed">{remedy.text}</p>
+      <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.82)" }}>
+        {remedy.text}
+      </p>
     </motion.div>
   );
 }

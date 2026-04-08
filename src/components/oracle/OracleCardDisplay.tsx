@@ -71,20 +71,32 @@ function OracleCardDisplayBase({ card, onFlipComplete }: OracleCardDisplayProps)
 
         {/* Front face — revealed after flip */}
         <div
-          className="absolute inset-0 rounded-2xl overflow-hidden bg-white/10 backdrop-blur-md border border-white/20"
-          style={{ backfaceVisibility: "hidden" }}
+          className="absolute inset-0 rounded-2xl overflow-hidden"
+          style={{
+            backfaceVisibility: "hidden",
+            background: "var(--glass-bg-mid)",
+            border: "1px solid var(--glass-border-mid)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+          }}
         >
-          <div className="w-full h-full flex flex-col p-6 gap-3">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(135deg, rgba(139,92,246,0.16) 0%, rgba(6,182,212,0.08) 100%)",
+            }}
+          />
+          <div className="w-full h-full flex flex-col p-6 gap-3 relative">
             {/* Card name */}
-            <h2 className="font-display text-xl font-bold text-white leading-tight">
+            <h2 className="font-display text-xl font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
               {card.name}
             </h2>
 
             {/* Divider */}
-            <div className="w-8 h-px bg-white/30" />
+            <div className="w-8 h-px" style={{ background: "var(--glass-border-mid)" }} />
 
             {/* Description */}
-            <p className="text-sm text-white/80 leading-relaxed flex-1">
+            <p className="text-sm leading-relaxed flex-1" style={{ color: "rgba(245,247,255,0.78)" }}>
               {card.description}
             </p>
 
@@ -93,7 +105,12 @@ function OracleCardDisplayBase({ card, onFlipComplete }: OracleCardDisplayProps)
               {card.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded-full text-xs text-white/60 border border-white/20 bg-white/5"
+                  className="px-2 py-0.5 rounded-full text-xs"
+                  style={{
+                    color: "rgba(245,247,255,0.55)",
+                    border: "1px solid var(--glass-border-soft)",
+                    background: "var(--glass-bg-soft)",
+                  }}
                 >
                   {tag}
                 </span>

@@ -65,37 +65,40 @@ export function ReadOnlyView({ log, onEdit }: ReadOnlyViewProps) {
           >
             {moodLevel.emoji}
           </motion.span>
-          <span className="text-xl font-semibold text-white">{moodLevel.label}</span>
-          <span className="text-sm text-white/50">{encouragingMessage}</span>
+          <span className="text-xl font-semibold" style={{ color: "var(--text-primary)" }}>{moodLevel.label}</span>
+          <span className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>{encouragingMessage}</span>
         </motion.div>
 
         {/* Glass card con glow colorato */}
         <motion.div
           variants={item}
-          className="w-full space-y-3 rounded-2xl bg-surface-10 p-6 border"
+          className="w-full space-y-3 rounded-2xl p-6"
           style={{
-            boxShadow: `0 0 32px ${moodLevel.color}33`,
-            borderColor: `${moodLevel.color}40`,
+            background: "var(--glass-bg-mid)",
+            border: `1px solid ${moodLevel.color}44`,
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: `0 0 32px ${moodLevel.color}28`,
           }}
         >
           <div className="flex items-center justify-between">
-            <span className="text-sm text-white/50">Umore</span>
+            <span className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>Umore</span>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-semibold text-white">{moodLevel.emoji}</span>
-              <span className="text-sm text-white/50">{log.moodScore}/10</span>
+              <span className="text-xl">{moodLevel.emoji}</span>
+              <span className="text-sm" style={{ color: "rgba(245,247,255,0.55)" }}>{log.moodScore}/10</span>
             </div>
           </div>
 
           {log.note && (
             <div>
-              <span className="mb-1 block text-sm text-white/50">Nota</span>
-              <p className="text-sm text-white/80">{log.note}</p>
+              <span className="mb-1 block text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>Nota</span>
+              <p className="text-sm" style={{ color: "rgba(245,247,255,0.8)" }}>{log.note}</p>
             </div>
           )}
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-white/50">Salvato</span>
-            <span className="text-sm text-white/60">
+            <span className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>Salvato</span>
+            <span className="text-sm" style={{ color: "rgba(245,247,255,0.55)" }}>
               {new Date(log.createdAt).toLocaleTimeString("it-IT", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -109,7 +112,7 @@ export function ReadOnlyView({ log, onEdit }: ReadOnlyViewProps) {
           variants={item}
           type="button"
           onClick={onEdit}
-          className="rounded-full bg-surface-10 px-6 py-3 text-sm text-white/70 transition-colors hover:bg-surface-20 hover:text-white border border-surface-15"
+          className="btn-ghost"
         >
           Modifica
         </motion.button>
@@ -117,7 +120,7 @@ export function ReadOnlyView({ log, onEdit }: ReadOnlyViewProps) {
         <motion.div variants={item}>
           <Link
             href="/history"
-            className="inline-flex rounded-full border border-surface-20 bg-surface-10 px-5 py-2.5 text-sm text-white/75 transition-colors hover:bg-surface-20 hover:text-white"
+            className="btn-ghost"
           >
             Rivedi lo storico
           </Link>

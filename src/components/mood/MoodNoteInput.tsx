@@ -26,11 +26,18 @@ export function MoodNoteInput({ value, onChange, className }: MoodNoteInputProps
             key="button"
             type="button"
             onClick={() => setExpanded(true)}
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="h-12 w-full rounded-full border border-surface-15 bg-surface-10 px-4 text-left text-sm text-white/60 transition hover:bg-surface-15 focus:outline-none focus:ring-2 focus:ring-white/30"
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.18 }}
+            className="h-12 w-full rounded-2xl px-4 text-left text-sm transition"
+            style={{
+              background: "var(--glass-bg-soft)",
+              border: "1px solid var(--glass-border-soft)",
+              color: "rgba(245,247,255,0.45)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+            }}
             aria-label="Aggiungi un pensiero"
           >
             Aggiungi un pensiero...
@@ -43,7 +50,7 @@ export function MoodNoteInput({ value, onChange, className }: MoodNoteInputProps
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
             <textarea
@@ -52,8 +59,19 @@ export function MoodNoteInput({ value, onChange, className }: MoodNoteInputProps
               onBlur={() => !value && setExpanded(false)}
               placeholder={placeholder}
               maxLength={NOTE_MAX_LENGTH}
-              className="min-h-[120px] w-full resize-none rounded-2xl border border-surface-20 bg-surface-10 p-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-white/35"
+              className="min-h-[120px] w-full resize-none rounded-2xl p-4 text-sm"
+              style={{
+                background: "var(--glass-bg-mid)",
+                border: "1px solid var(--glass-border-mid)",
+                color: "var(--text-primary)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                outline: "none",
+              }}
               autoFocus
+              onFocus={(e) => {
+                (e.target as HTMLTextAreaElement).style.borderColor = "var(--glass-border-strong)";
+              }}
             />
 
             {value.length >= COUNTER_VISIBLE_THRESHOLD && (
@@ -61,8 +79,9 @@ export function MoodNoteInput({ value, onChange, className }: MoodNoteInputProps
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className={`mt-1 pr-1 text-right text-xs ${
-                  value.length >= COUNTER_WARNING_THRESHOLD ? "text-red-400" : "text-white/50"
+                  value.length >= COUNTER_WARNING_THRESHOLD ? "text-red-400" : ""
                 }`}
+                style={{ color: value.length >= COUNTER_WARNING_THRESHOLD ? undefined : "rgba(245,247,255,0.4)" }}
               >
                 {value.length}/{NOTE_MAX_LENGTH}
               </motion.p>

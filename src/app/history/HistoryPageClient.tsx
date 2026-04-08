@@ -67,13 +67,17 @@ export function HistoryPageClient() {
 
     if (detailState.status === "not-found") {
       return (
-        <main className="mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center gap-4 px-4 text-center">
-          <p className="text-xl font-semibold text-white/85">Memoria non trovata</p>
-          <p className="text-sm text-white/65">Questa data non è disponibile nello storico locale.</p>
+        <main className="mx-auto flex min-h-screen w-full max-w-lg flex-col items-center justify-center gap-4 px-4 text-center">
+          <p className="text-xl font-semibold" style={{ color: "rgba(245,247,255,0.85)" }}>
+            Memoria non trovata
+          </p>
+          <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+            Questa data non è disponibile nello storico locale.
+          </p>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm text-white/85 transition-colors hover:bg-white/20"
+            className="btn-ghost mt-2"
           >
             Torna indietro
           </button>
@@ -85,11 +89,20 @@ export function HistoryPageClient() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col gap-5 px-4 py-10 sm:px-6">
-      <header className="space-y-2 text-center sm:text-left">
-        <p className="text-xs uppercase tracking-wider text-white/45">Moonmood</p>
-        <h1 className="font-display text-3xl font-bold text-white">Le tue memorie</h1>
-        <p className="text-sm text-white/65">Rileggi il tuo cammino emotivo, una memoria alla volta.</p>
+    <main className="mx-auto flex min-h-screen w-full max-w-lg flex-col gap-5 px-4 pt-10 pb-4">
+      <header className="space-y-1 text-center">
+        <p
+          className="text-xs uppercase tracking-[0.18em]"
+          style={{ color: "rgba(245,247,255,0.4)" }}
+        >
+          Moonmood
+        </p>
+        <h1 className="font-display text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
+          Le tue memorie
+        </h1>
+        <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+          Rileggi il tuo cammino emotivo, una memoria alla volta.
+        </p>
       </header>
 
       <MoodHistory />

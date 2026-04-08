@@ -34,6 +34,19 @@ type PageState =
   | { status: "loading" }
   | OraclePageResolvedState;
 
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.06 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.4, 0, 0.2, 1] as const } },
+};
+
 export default function OraclePage() {
   const router = useRouter();
   const [pageState, setPageState] = useState<PageState>({ status: "loading" });
@@ -54,87 +67,207 @@ export default function OraclePage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-12">
-      <AnimatePresence mode="wait">
-        {pageState.status === "loading" && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col items-center gap-3"
-          >
-            <span className="font-display text-2xl font-bold text-white/80 animate-pulse">
-              Moonmood
-            </span>
-            <span className="text-sm text-white/40">Caricamento...</span>
-          </motion.div>
-        )}
+    <AnimatePresence mode="wait">
+      {/* Loading */}
+      {pageState.status === "loading" && (
+        <motion.main
+          key="loading"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex min-h-screen flex-col items-center justify-center gap-3"
+        >
+          <span className="font-display text-2xl font-bold animate-pulse" style={{ color: "var(--accent-violet)" }}>
+            Moonmood
+          </span>
+          <span className="text-sm" style={{ color: "rgba(245,247,255,0.4)" }}>Caricamento...</span>
+        </motion.main>
+      )}
 
-        {pageState.status === "empty" && (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-col items-center gap-6 text-center max-w-xs"
+      {/* Empty — no mood logged */}
+      {pageState.status === "empty" && (
+        <motion.main
+          key="empty"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.36 }}
+          className="flex min-h-screen flex-col items-center justify-center gap-5 px-6 text-center"
+        >
+          <span className="text-5xl" aria-hidden="true">🌑</span>
+          <div className="glass rounded-2xl p-6 max-w-xs w-full space-y-3">
+            <p className="font-display text-lg font-bold" style={{ color: "var(--text-primary)" }}>
+              Nessun oracolo disponibile
+            </p>
+            <p className="text-sm" style={{ color: "rgba(245,247,255,0.55)" }}>
+              Registra il tuo umore per ricevere il messaggio del giorno.
+            </p>
+          </div>
+          <button
+            onClick={() => router.push("/mood")}
+            className="btn-primary max-w-xs"
+            style={{ maxWidth: 240 }}
           >
-            <span className="text-5xl" aria-hidden="true">🌑</span>
-            <p className="font-display text-xl font-bold text-white/80">
-              Non hai ancora registrato il tuo umore oggi.
-            </p>
-            <p className="text-sm text-white/50">
-              Torna alla home per registrare il tuo stato emotivo e ricevere il tuo oracolo.
-            </p>
-            <button
-              onClick={() => router.push("/")}
-              className="mt-2 px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-medium transition-colors"
+            Registra l&apos;umore
+          </button>
+        </motion.main>
+      )}
+
+      {/* Oracle ready */}
+      {pageState.status === "ready" && (
+        <motion.main
+          key="ready"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="show"
+          exit={{ opacity: 0 }}
+          className="flex flex-col gap-5 px-4 pt-8 pb-4"
+        >
+          {/* Header */}
+          <motion.header variants={fadeUp} className="text-center">
+            <p
+              className="text-xs uppercase tracking-[0.18em]"
+              style={{ color: "rgba(245,247,255,0.4)" }}
             >
-              Torna alla Home
-            </button>
-          </motion.div>
-        )}
-
-        {pageState.status === "ready" && (
-          <motion.div
-            key="ready"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-col items-center gap-8 w-full"
-          >
-            {/* Moon phase decorative label */}
+              Oracolo del Giorno
+            </p>
+            <h1
+              className="font-display text-2xl font-bold mt-1"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Il tuo messaggio
+            </h1>
             {pageState.moonPhaseIt && (
-              <div className="flex items-center gap-2">
-                <span className="text-base" aria-hidden="true">🌙</span>
-                <span className="text-sm text-white/60 font-medium">
-                  {pageState.moonPhaseIt}
-                </span>
+              <div
+                className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full text-xs"
+                style={{
+                  background: "var(--glass-bg-soft)",
+                  border: "1px solid var(--glass-border-soft)",
+                  color: "rgba(245,247,255,0.6)",
+                }}
+              >
+                <span aria-hidden="true">🌙</span>
+                {pageState.moonPhaseIt}
               </div>
             )}
+          </motion.header>
 
-            {/* Oracle card with 3D flip */}
+          {/* Oracle card flip */}
+          <motion.div variants={fadeUp}>
             <OracleCardDisplay
               card={pageState.card}
               onFlipComplete={handleFlipComplete}
             />
+          </motion.div>
 
-            {/* Remedy — fades in after card flip */}
+          {/* Remedy card */}
+          <motion.div variants={fadeUp}>
             <SuggestedRemedy remedy={pageState.remedy} isVisible={isRemedyVisible} />
+          </motion.div>
 
-            {/* Subtle home link */}
+          {/* Approfondimenti accordion */}
+          <motion.div variants={fadeUp}>
+            <ApprofondimentiAccordion card={pageState.card} />
+          </motion.div>
+
+          {/* Back link */}
+          <motion.div variants={fadeUp} className="text-center pb-2">
             <button
               onClick={() => router.push("/")}
-              className="text-xs text-white/30 hover:text-white/60 transition-colors mt-2"
+              className="text-xs"
+              style={{ color: "rgba(245,247,255,0.35)" }}
             >
               ← Torna alla Home
             </button>
           </motion.div>
+        </motion.main>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ─── Approfondimenti Accordion ─── */
+
+interface ApprofondimentiAccordionProps {
+  card: OracleCard;
+}
+
+function ApprofondimentiAccordion({ card }: ApprofondimentiAccordionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const items = [
+    {
+      label: "Significato della carta",
+      content: card.description,
+    },
+    {
+      label: "Parole chiave",
+      content: card.tags.join(" · "),
+    },
+  ].filter((item) => item.content);
+
+  return (
+    <div className="glass rounded-2xl overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left"
+        aria-expanded={isOpen}
+        style={{ minHeight: 52 }}
+      >
+        <span
+          className="text-sm font-semibold"
+          style={{ color: "rgba(245,247,255,0.75)" }}
+        >
+          Approfondimenti (opzionale)
+        </span>
+        <motion.span
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.22 }}
+          style={{ color: "rgba(245,247,255,0.4)", display: "inline-flex" }}
+          aria-hidden
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </motion.span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div
+              className="px-5 pb-5 pt-1 space-y-4"
+              style={{ borderTop: "1px solid var(--glass-border-soft)" }}
+            >
+              {items.map((item) => (
+                <div key={item.label} className="space-y-1">
+                  <p
+                    className="text-xs font-semibold uppercase tracking-wider"
+                    style={{ color: "rgba(245,247,255,0.4)" }}
+                  >
+                    {item.label}
+                  </p>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "rgba(245,247,255,0.75)" }}
+                  >
+                    {item.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }

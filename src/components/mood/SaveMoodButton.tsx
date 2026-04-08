@@ -90,15 +90,25 @@ export function SaveMoodButton({ onSave, moodScore = 5, disabled, className }: S
         initial={{ opacity: 0, y: 20 }}
         animate={
           saved
-            ? { opacity: 1, y: 0, scale: [1, 1.05, 1] }
+            ? { opacity: 1, y: 0, scale: [1, 1.04, 1] }
             : { opacity: 1, y: 0, scale: 1 }
         }
         transition={
           saved
-            ? { duration: 0.4, type: "tween", ease: "easeInOut" }
-            : { duration: 0.3, type: "spring" }
+            ? { duration: 0.36, type: "tween", ease: "easeInOut" }
+            : { duration: 0.28, type: "spring" }
         }
-        className={`relative h-14 w-full rounded-full border border-white/30 bg-gradient-to-r from-[#4fd1c5]/35 via-[#7c3aed]/35 to-[#ec4899]/35 px-5 font-semibold text-white shadow-[0_0_24px_rgba(124,58,237,0.28)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-55 ${className ?? ""}`}
+        className={`relative h-14 w-full rounded-full font-semibold transition ${className ?? ""}`}
+        style={{
+          background: saved
+            ? "linear-gradient(135deg, rgba(6,182,212,0.35), rgba(139,92,246,0.35))"
+            : "linear-gradient(135deg, rgba(139,92,246,0.30), rgba(6,182,212,0.20))",
+          border: "1px solid rgba(139,92,246,0.40)",
+          color: "var(--text-primary)",
+          boxShadow: "0 0 28px rgba(139,92,246,0.24)",
+          opacity: (disabled || saving) ? 0.5 : 1,
+          cursor: (disabled || saving) ? "not-allowed" : "pointer",
+        }}
       >
         {saving ? (
           <span className="inline-flex items-center gap-2">
