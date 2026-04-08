@@ -63,7 +63,7 @@ Plans:
 - [x] 02-02-PLAN.md — Author oracle seed data (22 cards + remedies + aphorisms in Italian)
 - [x] 02-03-PLAN.md — TDD: lunar phase service (astronomia) + mood trend service
 - [x] 02-04-PLAN.md — TDD: oracle selection engine + useOracleEngine hook
-- [ ] 02-05-PLAN.md — Wire oracle into useDailySession + /oracle page + flip animation
+- [x] 02-05-PLAN.md — Wire oracle into useDailySession + /oracle page + flip animation
 - [ ] 02-06-PLAN.md — Human verification of complete Phase 2 oracle experience
 
 ### Phase 3: Mood History
@@ -93,6 +93,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Mood Input | 6/6 | Complete   | 2026-04-07 |
-| 2. Oracle Response | 4/6 | In Progress|  |
+| 2. Oracle Response | 5/6 | In Progress|  |
 | 3. Mood History | 0/? | Not started | - |
 | 4. PWA Shell | 0/? | Not started | - |
