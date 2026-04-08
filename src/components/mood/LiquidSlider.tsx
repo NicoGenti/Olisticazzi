@@ -15,7 +15,6 @@ const MIN_SCORE = 0;
 const MAX_SCORE = 10;
 const DEFAULT_SCORE = 5;
 const PILL_WIDTH = 52;
-const PILL_HEIGHT = 32;
 const HIT_TARGET_HEIGHT = 44;
 
 export interface LiquidSliderProps {
@@ -103,9 +102,9 @@ export function LiquidSlider({ value, onValueChange, className }: LiquidSliderPr
 
   const applyKeyboardScore = (rawScore: number) => {
     const nextScore = clampScore(rawScore);
+    navigator.vibrate?.(8);
     if (nextScore !== effectiveScore) {
       onValueChange(nextScore);
-      navigator.vibrate?.(8);
     }
     if (!hasInteracted) setHasInteracted(true);
     hideHint();
@@ -250,7 +249,7 @@ export function LiquidSlider({ value, onValueChange, className }: LiquidSliderPr
         }}
       >
         <motion.div
-          className="absolute left-1/2 top-1/2 h-8 w-13 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+          className="absolute left-1/2 top-1/2 h-8 w-[52px] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
           style={{
             background: blobColor,
             filter: "blur(14px)",
