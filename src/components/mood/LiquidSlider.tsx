@@ -13,7 +13,7 @@ import { getMoodLevel } from "@/lib/moodConfig";
 const MIN_SCORE = 0;
 const MAX_SCORE = 10;
 const DEFAULT_SCORE = 5;
-const BLOB_SIZE = 80;
+const BLOB_SIZE = 56;
 
 const BLOB_PATHS = [
   "M 30 0 C 55 5 55 55 30 60 C 5 55 5 5 30 0 Z",
@@ -162,7 +162,7 @@ export function LiquidSlider({ value, onValueChange, className }: LiquidSliderPr
   return (
     <div
       ref={trackRef}
-      className={`relative h-28 w-full select-none ${className ?? ""}`}
+      className={`relative h-20 w-full select-none ${className ?? ""}`}
       style={{ touchAction: "none" }}
       aria-label="Selettore umore"
     >

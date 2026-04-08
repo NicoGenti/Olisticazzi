@@ -66,20 +66,25 @@ function writeLocalStorageLogs(logs: MoodLog[]): void {
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(logs));
 }
 
-export async function saveMoodLog(entry: MoodEntry): Promise<MoodLog> {
+export async function saveMoodLog(entry: MoodEntry & { id?: string; createdAt?: number }): Promise<MoodLog> {
   moodLogSchema.parse(entry);
 
   const log: MoodLog = {
     ...entry,
-    id: crypto.randomUUID(),
-    createdAt: Date.now(),
+    id: entry.id ?? crypto.randomUUID(),
+    createdAt: entry.createdAt ?? Date.now(),
   };
 
   try {
     await db.dailyLogs.put(log);
   } catch {
     const existing = readLocalStorageLogs();
-    existing.push(log);
+    const idx = existing.findIndex((l) => l.id === log.id);
+    if (idx >= 0) {
+      existing[idx] = log;
+    } else {
+      existing.push(log);
+    }
     writeLocalStorageLogs(existing);
   }
 
