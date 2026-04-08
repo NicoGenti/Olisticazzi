@@ -9,6 +9,9 @@ const moodLogSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   moodScore: z.number().min(0).max(10),
   note: z.string().max(280).optional(),
+  moonPhase: z.string().optional(),
+  oracleCardId: z.string().optional(),
+  oracleRemedyId: z.string().optional(),
 });
 
 const storedMoodLogSchema = moodLogSchema.extend({
@@ -23,6 +26,9 @@ class MoonmoodDB extends Dexie {
     super("MoonmoodDB");
     this.version(1).stores({
       dailyLogs: "id, date, createdAt",
+    });
+    this.version(2).stores({
+      dailyLogs: "id, date, createdAt, moonPhase, oracleCardId",
     });
   }
 }
