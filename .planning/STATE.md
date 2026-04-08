@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 Phase: 02 (oracle-response) — EXECUTING
 Plan: 6 of 6
 Status: Phase complete — ready for verification
-Last activity: 2026-04-08
+Last activity: 2026-04-08 - Completed quick task 260408-m51: implementa il piano docs/superpowers/specs/2026-04-08-refined-mood-slider-design.md
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -108,7 +108,7 @@ None yet.
 
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
-| 260408-m51 | Implementa il piano docs superpowers spec refined mood slider | 2026-04-08 | cb4c618 | [260408-m51-implementa-il-piano-docs-superpowers-spe](./quick/260408-m51-implementa-il-piano-docs-superpowers-spe/) |
+| 260408-m51 | implementa il piano docs/superpowers/specs/2026-04-08-refined-mood-slider-design.md | 2026-04-08 | cb4c618 | [260408-m51-implementa-il-piano-docs-superpowers-spe](./quick/260408-m51-implementa-il-piano-docs-superpowers-spe/) |
 | 260408-ey3 | Fix LiquidSlider blob drag affordance | 2026-04-08 | 96d70a2 | [260408-ey3-fix-liquidslider-blob-drag-affordance](./quick/260408-ey3-fix-liquidslider-blob-drag-affordance/) |
 | 260408-fjw | Add GitHub Pages workflow for static deploy | 2026-04-08 | a89f99f | [260408-fjw-aggiungi-github-pages-workflow-per-deplo](./quick/260408-fjw-aggiungi-github-pages-workflow-per-deplo/) |
 
