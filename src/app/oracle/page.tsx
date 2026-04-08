@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -11,6 +11,10 @@ import oracleCardsRaw from "@/data/oracle_seed.json";
 import remediesRaw from "@/data/remedies_seed.json";
 import type { OracleCard, Remedy } from "@/types/oracle";
 import type { MoonPhaseName } from "@/types/astrology";
+import {
+  resolveOraclePageState,
+  type OraclePageResolvedState,
+} from "@/app/oracle/oraclePageState";
 
 const oracleCards = oracleCardsRaw as OracleCard[];
 const remedies = remediesRaw as Remedy[];
@@ -28,35 +32,23 @@ const MOON_PHASE_IT: Record<MoonPhaseName, string> = {
 
 type PageState =
   | { status: "loading" }
-  | { status: "empty" }
-  | { status: "ready"; card: OracleCard; remedy: Remedy; moonPhaseIt: string };
+  | OraclePageResolvedState;
 
 export default function OraclePage() {
   const router = useRouter();
   const [pageState, setPageState] = useState<PageState>({ status: "loading" });
   const [isRemedyVisible, setIsRemedyVisible] = useState(false);
+  const handleFlipComplete = useCallback(() => {
+    setIsRemedyVisible(true);
+  }, []);
 
   useEffect(() => {
     void getTodayLog().then((log) => {
-      if (!log || !log.oracleCardId) {
-        setPageState({ status: "empty" });
-        return;
-      }
-
-      const card = oracleCards.find((c) => c.id === log.oracleCardId);
-      const remedy = remedies.find((r) => r.id === log.oracleRemedyId);
-
-      if (!card || !remedy) {
-        setPageState({ status: "empty" });
-        return;
-      }
-
-      const moonPhaseIt = log.moonPhase
-        ? (MOON_PHASE_IT[log.moonPhase as MoonPhaseName] ?? log.moonPhase)
-        : "";
-
-      setPageState({ status: "ready", card, remedy, moonPhaseIt });
+      const resolvedState = resolveOraclePageState(log, oracleCards, remedies, MOON_PHASE_IT);
+      setIsRemedyVisible(false);
+      setPageState(resolvedState);
     }).catch(() => {
+      setIsRemedyVisible(false);
       setPageState({ status: "empty" });
     });
   }, []);
@@ -127,7 +119,7 @@ export default function OraclePage() {
             {/* Oracle card with 3D flip */}
             <OracleCardDisplay
               card={pageState.card}
-              onFlipComplete={() => setIsRemedyVisible(true)}
+              onFlipComplete={handleFlipComplete}
             />
 
             {/* Remedy — fades in after card flip */}

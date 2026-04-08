@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { memo } from "react";
 import type { OracleCard } from "@/types/oracle";
 
 interface OracleCardDisplayProps {
@@ -13,7 +14,7 @@ interface OracleCardDisplayProps {
  * Animates from face-down (rotateY 180) to face-up (rotateY 0) over 1.2s.
  * Uses Framer Motion for the Y-axis rotation, preserve-3d + backfaceVisibility for the flip effect.
  */
-export function OracleCardDisplay({ card, onFlipComplete }: OracleCardDisplayProps) {
+function OracleCardDisplayBase({ card, onFlipComplete }: OracleCardDisplayProps) {
   return (
     <div style={{ perspective: "1200px" }} className="flex items-center justify-center">
       <motion.div
@@ -104,3 +105,5 @@ export function OracleCardDisplay({ card, onFlipComplete }: OracleCardDisplayPro
     </div>
   );
 }
+
+export const OracleCardDisplay = memo(OracleCardDisplayBase);

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { memo } from "react";
 import type { Remedy } from "@/types/oracle";
 
 interface SuggestedRemedyProps {
@@ -28,7 +29,7 @@ const CATEGORY_LABELS: Record<string, string> = {
  * Remedy suggestion card that fades in after the oracle card flip completes.
  * Uses Framer Motion for the opacity + y-axis fade-in transition.
  */
-export function SuggestedRemedy({ remedy, isVisible }: SuggestedRemedyProps) {
+function SuggestedRemedyBase({ remedy, isVisible }: SuggestedRemedyProps) {
   const icon = CATEGORY_ICONS[remedy.category] ?? "✨";
   const label = CATEGORY_LABELS[remedy.category] ?? remedy.category;
 
@@ -54,3 +55,5 @@ export function SuggestedRemedy({ remedy, isVisible }: SuggestedRemedyProps) {
     </motion.div>
   );
 }
+
+export const SuggestedRemedy = memo(SuggestedRemedyBase);
