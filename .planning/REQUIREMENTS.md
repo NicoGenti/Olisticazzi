@@ -141,3 +141,39 @@ Each entry provides an authoritative requirement statement and acceptance criter
 - Card records include: `id`, Italian `name`, Italian `description`, `moodRange`, `moonPhases`, and `tags`.
 - Remedy records include: `id`, Italian `text`, `linkedCardId`, and `category`, with one remedy per card.
 - The oracle path reads these datasets via static imports with no network dependency for content retrieval.
+
+---
+
+### ASTR-01 — Client-Side Lunar Phase Computation (8 Phases)
+
+**Statement:** The app shall compute lunar phase client-side using `astronomia` and normalize output to exactly 8 named moon phases for oracle logic and display.
+
+**Acceptance criteria:**
+- Lunar phase computation for oracle flow is executed locally in app code using `astronomia`.
+- The resulting phase value is one of exactly these 8 names: New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Full Moon, Waning Gibbous, Last Quarter, Waning Crescent.
+- No additional lunar metrics (illumination percentage, lunar age, zodiac position) are required to satisfy this requirement.
+- Oracle selection consumes the normalized phase name in its scoring path.
+
+---
+
+### ASTR-02 — Save-Time Moon Phase Snapshot Persistence
+
+**Statement:** The lunar phase used for an oracle result shall be captured at mood save time and persisted in the associated MoodLog record for deterministic replay on `/oracle`.
+
+**Acceptance criteria:**
+- When the user saves the daily mood log, moon phase is computed during the save flow (not lazily only at render).
+- The MoodLog schema includes optional `moonPhase` and persists it for the saved entry.
+- The `/oracle` route reads persisted `moonPhase` from today’s log to render/log the saved result context.
+- Existing older logs without `moonPhase` remain valid due to optional schema fields.
+
+---
+
+### ASTR-03 — No External Astrology API Dependency
+
+**Statement:** The astrology path used by oracle selection shall remain fully local and must not depend on external HTTP APIs for lunar phase data.
+
+**Acceptance criteria:**
+- No network request is required to calculate moon phase during save or oracle selection flows.
+- Disabling network access does not prevent lunar phase calculation for oracle selection.
+- Oracle selection and `/oracle` rendering continue to function with bundled data and local persistence only.
+- Any astrology dependency used in this path is a local library/package, not a remote service contract.
