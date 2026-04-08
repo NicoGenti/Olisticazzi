@@ -95,7 +95,7 @@ export function SaveMoodButton({ onSave, moodScore = 5, disabled, className }: S
         }
         transition={
           saved
-            ? { duration: 0.4, type: "spring", stiffness: 300, damping: 15 }
+            ? { duration: 0.4, type: "tween", ease: "easeInOut" }
             : { duration: 0.3, type: "spring" }
         }
         className={`relative h-14 w-full rounded-full border border-white/30 bg-gradient-to-r from-[#4fd1c5]/35 via-[#7c3aed]/35 to-[#ec4899]/35 px-5 font-semibold text-white shadow-[0_0_24px_rgba(124,58,237,0.28)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-55 ${className ?? ""}`}
