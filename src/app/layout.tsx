@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
-import { OlisticazziGradientOverlay } from "@/components/olisticazzi/OlisticazziGradientOverlay";
+import { MoonmoodGradientOverlay } from "@/components/moonmood/MoonmoodGradientOverlay";
 import { GradientIntensityProvider } from "@/context/GradientIntensityContext";
 import "@/services/db";
 
@@ -10,7 +10,7 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-display" });
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
-  title: "Olisticazzi",
+  title: "Moonmood",
   description: "Il tuo tracker spirituale dell'umore"
 };
 
@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="it" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
       <body className="min-h-screen bg-black text-white font-body">
         <GradientIntensityProvider>
-          <OlisticazziGradientOverlay />
+          <MoonmoodGradientOverlay />
           {children}
         </GradientIntensityProvider>
       </body>

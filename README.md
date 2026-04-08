@@ -1,10 +1,10 @@
-# Olisticazzi
+# Moonmood
 
 App mobile-first per il tracciamento dell'umore con engine oracolare basato su fase lunare e weighted random selection.
 
 ## Overview
 
-Olisticazzi è una **Progressive Web App (PWA) offline-first** che permette all'utente di registrare il proprio stato d'umore giornaliero (0–10) e ricevere una carta oracolare personalizzata in base al mood, alla fase lunare corrente e al trend degli ultimi giorni.
+Moonmood è una **Progressive Web App (PWA) offline-first** che permette all'utente di registrare il proprio stato d'umore giornaliero (0–10) e ricevere una carta oracolare personalizzata in base al mood, alla fase lunare corrente e al trend degli ultimi giorni.
 
 Nessun backend, nessun account, nessun dato inviato a server. Tutto gira nel browser.
 

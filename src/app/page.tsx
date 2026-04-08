@@ -31,7 +31,7 @@ export default function Home() {
           className="flex min-h-screen flex-col items-center justify-center gap-3"
         >
           <span className="font-display text-2xl font-bold text-white/80 animate-pulse">
-            Olisticazzi
+            Moonmood
           </span>
           <span className="text-sm text-white/40">Caricamento...</span>
         </motion.main>

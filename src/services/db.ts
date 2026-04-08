@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import type { MoodEntry, MoodLog } from "@/types/mood";
 
-const LOCAL_STORAGE_KEY = "olisticazzi_logs";
+const LOCAL_STORAGE_KEY = "moonmood_logs";
 
 const moodLogSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -11,18 +11,18 @@ const moodLogSchema = z.object({
   note: z.string().max(280).optional(),
 });
 
-class OlisticazziDB extends Dexie {
+class MoonmoodDB extends Dexie {
   dailyLogs!: Table<MoodLog>;
 
   constructor() {
-    super("OlisticazziDB");
+    super("MoonmoodDB");
     this.version(1).stores({
       dailyLogs: "id, date, createdAt",
     });
   }
 }
 
-export const db = new OlisticazziDB();
+export const db = new MoonmoodDB();
 
 function getTodayDateString(): string {
   return new Date().toLocaleDateString("sv-SE");

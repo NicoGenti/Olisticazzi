@@ -6,7 +6,7 @@ import { db, getAllLogs, getTodayLog, saveMoodLog } from "./db";
 
 beforeEach(async () => {
   await db.dailyLogs.clear();
-  localStorage.removeItem("olisticazzi_logs");
+  localStorage.removeItem("moonmood_logs");
 });
 
 describe("saveMoodLog", () => {

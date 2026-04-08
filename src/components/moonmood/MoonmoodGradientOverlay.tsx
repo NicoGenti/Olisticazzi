@@ -63,12 +63,12 @@ function buildGradient(score: number): string {
   `;
 }
 
-export interface OlisticazziGradientOverlayProps {
+export interface MoonmoodGradientOverlayProps {
   /** Moltiplicatore opacità blob e velocità drift (0-1, default 1) */
   intensity?: number;
 }
 
-export function OlisticazziGradientOverlay({ intensity: intensityProp }: OlisticazziGradientOverlayProps) {
+export function MoonmoodGradientOverlay({ intensity: intensityProp }: MoonmoodGradientOverlayProps) {
   const moodScore = useMoodScore();
   const { intensity: contextIntensity } = useGradientIntensity();
   const intensity = intensityProp ?? contextIntensity;
