@@ -61,7 +61,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Install astronomia + define oracle/astrology/mood types + Dexie v2
 - [x] 02-02-PLAN.md — Author oracle seed data (22 cards + remedies + aphorisms in Italian)
-- [ ] 02-03-PLAN.md — TDD: lunar phase service (astronomia) + mood trend service
+- [x] 02-03-PLAN.md — TDD: lunar phase service (astronomia) + mood trend service
 - [ ] 02-04-PLAN.md — TDD: oracle selection engine + useOracleEngine hook
 - [ ] 02-05-PLAN.md — Wire oracle into useDailySession + /oracle page + flip animation
 - [ ] 02-06-PLAN.md — Human verification of complete Phase 2 oracle experience
