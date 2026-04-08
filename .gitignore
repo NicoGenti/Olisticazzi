@@ -1,6 +1,7 @@
 .planning/
 .claude/
 .vscode/
+.worktrees/
 node_modules/
 .next/
 out/
