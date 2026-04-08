@@ -18,7 +18,7 @@ export function buildDailySessionSavePayload({
 }: BuildDailySessionSavePayloadInput): DailySessionSavePayload {
   const normalizedNote = note.trim() || undefined;
 
-  if (sessionState.status === "editing") {
+  if (sessionState.status === "editing" || sessionState.status === "saved") {
     return {
       id: sessionState.log.id,
       createdAt: sessionState.log.createdAt,

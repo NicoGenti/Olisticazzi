@@ -50,6 +50,32 @@ describe("buildDailySessionSavePayload", () => {
     });
   });
 
+  it("keeps id/createdAt in saved mode as a defensive fallback", () => {
+    const existingLog: MoodLog = {
+      id: "4f87593e-fa2f-46d8-a9fd-9ea7a00d5b95",
+      date: "2026-04-08",
+      createdAt: 1712550005678,
+      moodScore: toMoodScore(4),
+      note: "saved note",
+    };
+    const sessionState: DailySessionState = { status: "saved", log: existingLog };
+
+    const payload = buildDailySessionSavePayload({
+      sessionState,
+      date: "2026-04-08",
+      moodScore: toMoodScore(8),
+      note: "updated from saved",
+    });
+
+    expect(payload).toEqual({
+      id: existingLog.id,
+      createdAt: existingLog.createdAt,
+      date: "2026-04-08",
+      moodScore: 8,
+      note: "updated from saved",
+    });
+  });
+
   it("normalizes empty or whitespace note to undefined", () => {
     const fresh: DailySessionState = { status: "fresh" };
     const existingLog: MoodLog = {

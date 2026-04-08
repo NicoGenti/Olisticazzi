@@ -35,6 +35,30 @@ class MoonmoodDB extends Dexie {
 
 export const db = new MoonmoodDB();
 
+function dedupeByDate(logs: MoodLog[]): { deduped: MoodLog[]; removedCount: number } {
+  const sorted = [...logs].sort((a, b) => {
+    if (b.createdAt !== a.createdAt) {
+      return b.createdAt - a.createdAt;
+    }
+    return b.id.localeCompare(a.id);
+  });
+
+  const seenDates = new Set<string>();
+  const deduped: MoodLog[] = [];
+  let removedCount = 0;
+
+  for (const log of sorted) {
+    if (seenDates.has(log.date)) {
+      removedCount += 1;
+      continue;
+    }
+    seenDates.add(log.date);
+    deduped.push(log);
+  }
+
+  return { deduped, removedCount };
+}
+
 function getTodayDateString(): string {
   return new Date().toLocaleDateString("sv-SE");
 }
@@ -91,20 +115,61 @@ export async function saveMoodLog(entry: MoodEntry & { id?: string; createdAt?: 
   return log;
 }
 
+export async function dedupeDailyLogs(): Promise<number> {
+  try {
+    const allLogs = await db.dailyLogs.toArray();
+    let removedFromDexie = 0;
+
+    const { deduped, removedCount } = dedupeByDate(allLogs);
+    if (removedCount > 0) {
+      const keepIds = new Set(deduped.map((log) => log.id));
+      const idsToDelete = allLogs.filter((log) => !keepIds.has(log.id)).map((log) => log.id);
+
+      await db.transaction("rw", db.dailyLogs, async () => {
+        for (const id of idsToDelete) {
+          await db.dailyLogs.delete(id);
+        }
+      });
+
+      removedFromDexie = removedCount;
+    }
+
+    const localLogs = readLocalStorageLogs();
+    const { deduped: dedupedLocalLogs, removedCount: removedFromLocalStorage } = dedupeByDate(localLogs);
+    if (removedFromLocalStorage > 0) {
+      writeLocalStorageLogs(dedupedLocalLogs);
+    }
+
+    return removedFromDexie + removedFromLocalStorage;
+  } catch {
+    const allLogs = readLocalStorageLogs();
+    const { deduped, removedCount } = dedupeByDate(allLogs);
+    if (removedCount > 0) {
+      writeLocalStorageLogs(deduped);
+    }
+    return removedCount;
+  }
+}
+
 export async function getTodayLog(): Promise<MoodLog | null> {
   const today = getTodayDateString();
 
   try {
-    const log = await db.dailyLogs.where("date").equals(today).first();
-    if (log) {
-      return log;
+    const logs = await db.dailyLogs.where("date").equals(today).toArray();
+    if (logs.length > 0) {
+      logs.sort((a, b) => b.createdAt - a.createdAt);
+      return logs[0];
     }
 
     const fallback = readLocalStorageLogs();
-    return fallback.find((item) => item.date === today) ?? null;
+    return fallback
+      .filter((item) => item.date === today)
+      .sort((a, b) => b.createdAt - a.createdAt)[0] ?? null;
   } catch {
     const all = readLocalStorageLogs();
-    return all.find((log) => log.date === today) ?? null;
+    return all
+      .filter((log) => log.date === today)
+      .sort((a, b) => b.createdAt - a.createdAt)[0] ?? null;
   }
 }
 
