@@ -1,90 +1,91 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { getMoodLevel } from "@/lib/moodConfig";
 import { useMoodHistory } from "@/hooks/useMoodHistory";
 
+function formatDateIt(date: string): string {
+  return new Date(`${date}T00:00:00`).toLocaleDateString("it-IT", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export function MoodHistory() {
-  const { groups, isLoading } = useMoodHistory();
+  const { groups, hasMore, loadMore, isLoading } = useMoodHistory();
 
   if (isLoading) {
     return null;
   }
 
-  const entries = groups
-    .flatMap((group) => group.items)
-    .slice(0, 7)
-    .map((item) => {
-      const d = new Date(`${item.date}T00:00:00`);
-      return {
-        date: item.date,
-        dayLabel: ["Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa"][d.getDay()],
-        score: item.moodScore,
-      };
-    })
-    .reverse();
-
-  const streak = 0;
-
-  const todayDate = new Date().toLocaleDateString("sv-SE");
+  if (groups.length === 0) {
+    return (
+      <div className="w-full rounded-2xl border border-surface-15 bg-surface-10 p-5 text-center space-y-3">
+        <p className="text-base font-semibold text-white/85">Le tue memorie stanno aspettando.</p>
+        <p className="text-sm text-white/60">Ogni nota salvata ti aiuta a riconoscere il tuo ritmo interiore.</p>
+        <Link
+          href="/"
+          className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/85 transition-colors hover:bg-white/20"
+        >
+          Torna a registrare l&apos;umore
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full rounded-2xl bg-surface-10 border border-surface-15 p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
-          Ultima settimana
-        </span>
-        {streak >= 2 && (
-          <span className="text-xs text-white/70">
-            🔥 {streak} giorni di fila!
-          </span>
-        )}
+    <div className="w-full rounded-2xl border border-surface-15 bg-surface-10 p-4 space-y-4">
+      <div className="space-y-4">
+        {groups.map((group, groupIndex) => (
+          <motion.section
+            key={group.monthKey}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: groupIndex * 0.04, duration: 0.28 }}
+            className="space-y-2"
+          >
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-white/45">{group.monthLabelIt}</h2>
+
+            <div className="space-y-2">
+              {group.items.map((item) => (
+                <Link
+                  key={item.date}
+                  href={`/history/${item.date}`}
+                  className="block rounded-xl border border-white/10 bg-black/10 px-3 py-2 transition-colors hover:bg-white/10"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm text-white/90">{formatDateIt(item.date)}</p>
+                      <p className="truncate text-xs text-white/60">{item.oracleCardName}</p>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm text-white/80">
+                      <span>{item.scoreEmoji}</span>
+                      <span className="font-medium">{item.moodScore}/10</span>
+                      <span
+                        className="inline-block h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: item.scoreColorToken }}
+                        aria-hidden
+                      />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.section>
+        ))}
       </div>
 
-      {/* Dots */}
-      <div className="flex items-end justify-between gap-1">
-        {entries.map((day, index) => {
-          const isToday = day.date === todayDate;
-          const moodLevel = day.score !== null ? getMoodLevel(day.score) : null;
-
-          return (
-            <motion.div
-              key={day.date}
-              className="flex flex-col items-center gap-1.5"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, duration: 0.3 }}
-            >
-              {/* Circle */}
-              <div className="relative flex items-center justify-center">
-                {isToday && day.score !== null && (
-                  <motion.div
-                    className="absolute h-5 w-5 rounded-full"
-                    style={{ backgroundColor: moodLevel?.color ?? "#ffffff" }}
-                    animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                )}
-                <div
-                  className="h-4 w-4 rounded-full"
-                  style={
-                    moodLevel
-                      ? { backgroundColor: moodLevel.color }
-                      : {
-                          backgroundColor: "transparent",
-                          border: "1.5px dashed rgba(255,255,255,0.25)",
-                        }
-                  }
-                  title={day.score !== null ? `${day.dayLabel}: ${day.score}/10` : `${day.dayLabel}: nessun log`}
-                />
-              </div>
-              {/* Day label */}
-              <span className="text-xs text-white/40">{day.dayLabel}</span>
-            </motion.div>
-          );
-        })}
-      </div>
+      {hasMore && (
+        <button
+          type="button"
+          onClick={loadMore}
+          className="w-full rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/85 transition-colors hover:bg-white/20"
+        >
+          Carica altre memorie
+        </button>
+      )}
     </div>
   );
 }
