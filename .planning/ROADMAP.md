@@ -22,6 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Oracle Response** - App delivers a meaningful oracle card and remedy based on mood and lunar phase (completed 2026-04-08)
 - [x] **Phase 3: Mood History** - User can review past logs and oracle responses (completed 2026-04-08)
 - [ ] **Phase 4: PWA Shell** - App is installable and works fully offline
+- [ ] **Phase 5: Quick Wins** - Surface bundled content, improve reports, add settings and favorites
 
 ## Phase Details
 
@@ -91,6 +92,19 @@ Plans:
   3. A service worker caches the app shell so reload works offline
 **Plans**: TBD
 
+### Phase 5: Quick Wins
+**Goal**: Surface existing bundled content (aphorisms, ironic phrases) in the home experience, enhance reports with temporal filters, add a settings page and a favorites system — all within the current local-first PWA architecture
+**Depends on**: Phase 4
+**Requirements**: ECO-01, STCZ-01, RPT-01, SET-01, FAV-01
+**Success Criteria** (what must be TRUE):
+  1. The home page displays a daily aphorism ("Eco del Giorno") sourced from the existing aphorisms_seed.json
+  2. The home page displays a daily ironic phrase ("Sticazzi") from a new seed dataset
+  3. The report page supports temporal filters (7 days, 30 days, 90 days, all time) with updated statistics
+  4. A settings page is accessible from navigation with language, notification toggles, and feature flags
+  5. Users can mark oracle cards and aphorisms as favorites (heart icon), persisted in IndexedDB
+  6. Favorite entries are browsable in a dedicated favorites list view
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
@@ -102,3 +116,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 2. Oracle Response | 7/7 | Complete    | 2026-04-08 |
 | 3. Mood History | 3/3 | Complete | 2026-04-08 |
 | 4. PWA Shell | 0/? | Not started | - |
+| 5. Quick Wins | 0/? | Not started | - |
