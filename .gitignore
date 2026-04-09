@@ -2,6 +2,7 @@
 .claude/
 .vscode/
 .worktrees/
+docs/
 node_modules/
 .next/
 out/
