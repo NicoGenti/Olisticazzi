@@ -270,7 +270,7 @@ function MiniMoodChart({ logs }: { logs: MoodLog[] }) {
   const max = 10;
 
   return (
-    <div className="flex items-end gap-1.5 h-16">
+    <div className="flex gap-1.5 h-16">
       {reversed.map((log) => {
         const level = getMoodLevel(log.moodScore);
         const heightPct = (log.moodScore / max) * 100;
