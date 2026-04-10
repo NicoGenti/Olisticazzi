@@ -3,6 +3,8 @@ import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { MoonmoodGradientOverlay } from "@/components/moonmood/MoonmoodGradientOverlay";
 import { GradientIntensityProvider } from "@/context/GradientIntensityContext";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { InstallBanner } from "@/components/layout/InstallBanner";
+import { ServiceWorkerRegistrar } from "@/components/layout/ServiceWorkerRegistrar";
 import "@/services/db";
 
 import "./globals.css";
@@ -12,7 +14,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--fon
 
 export const metadata: Metadata = {
   title: "Moonmood",
-  description: "Il tuo tracker spirituale dell'umore"
+  description: "Il tuo tracker spirituale dell'umore",
+  manifest: "/Moonmood/manifest.json",
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "Moonmood",
+  },
 };
 
 export default function RootLayout({
@@ -22,6 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
+      <head>
+        <link rel="apple-touch-icon" href="/Moonmood/icons/icon-192x192.png" />
+      </head>
       <body
         className="min-h-screen font-body"
         style={{ backgroundColor: "var(--bg-0)", color: "var(--text-primary)" }}
@@ -36,7 +47,9 @@ export default function RootLayout({
             {children}
           </div>
           <BottomNav />
+          <InstallBanner />
         </GradientIntensityProvider>
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );
