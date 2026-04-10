@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="it" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
       <head>
-        <link rel="apple-touch-icon" href="/Moonmood/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/Moonmood/icons/icon-180x180.png" />
       </head>
       <body
         className="min-h-screen font-body"

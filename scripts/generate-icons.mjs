@@ -4,11 +4,12 @@
  * Usage:  node scripts/generate-icons.mjs
  *
  * Produces:
+ *   public/icons/icon-180x180.png   (apple-touch-icon)
  *   public/icons/icon-192x192.png
  *   public/icons/icon-512x512.png
  *   public/icons/icon-maskable-512x512.png
  *
- * Requires: npm install --save-dev canvas  (or pnpm add -D canvas)
+ * Requires: pnpm add -D @napi-rs/canvas
  */
 import { createCanvas } from "@napi-rs/canvas";
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -26,31 +27,47 @@ const CYAN = "#06b6d4";
 const PINK = "#ec4899";
 
 /**
+ * Hex color to rgba with given alpha.
+ */
+function rgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+/**
  * Draw an aurora boreale-inspired icon on the given canvas context.
- * @param {CanvasRenderingContext2D} ctx
- * @param {number} size
- * @param {boolean} maskable — if true, keep content within 80% safe zone
+ * Colors are vibrant so the icon looks good even at 60pt on iOS home screen.
  */
 function drawIcon(ctx, size, maskable = false) {
   const cx = size / 2;
   const cy = size / 2;
 
-  // Background
-  ctx.fillStyle = BG;
+  // Background — slightly lighter to let aurora show
+  ctx.fillStyle = "#0c0c18";
   ctx.fillRect(0, 0, size, size);
 
-  // Aurora glow layers (radial gradients)
+  // Aurora glow layers — strong, vibrant gradients
   const layers = [
-    { x: size * 0.3, y: size * 0.7, r: size * 0.55, color: VIOLET, alpha: 0.45 },
-    { x: size * 0.65, y: size * 0.55, r: size * 0.5, color: CYAN, alpha: 0.35 },
-    { x: size * 0.5, y: size * 0.35, r: size * 0.4, color: PINK, alpha: 0.25 },
-    { x: size * 0.2, y: size * 0.3, r: size * 0.35, color: VIOLET, alpha: 0.2 },
-    { x: size * 0.75, y: size * 0.75, r: size * 0.3, color: CYAN, alpha: 0.18 },
+    // Big violet base glow (bottom-left)
+    { x: size * 0.25, y: size * 0.8, r: size * 0.7, color: VIOLET, alpha: 0.7 },
+    // Cyan sweep (top-right)
+    { x: size * 0.75, y: size * 0.3, r: size * 0.65, color: CYAN, alpha: 0.5 },
+    // Pink accent (center-top)
+    { x: size * 0.45, y: size * 0.2, r: size * 0.45, color: PINK, alpha: 0.35 },
+    // Secondary violet (top-left)
+    { x: size * 0.15, y: size * 0.25, r: size * 0.4, color: VIOLET, alpha: 0.4 },
+    // Secondary cyan (bottom-right)
+    { x: size * 0.85, y: size * 0.75, r: size * 0.35, color: CYAN, alpha: 0.35 },
+    // Extra pink warmth (center)
+    { x: size * 0.5, y: size * 0.55, r: size * 0.35, color: PINK, alpha: 0.2 },
   ];
 
   for (const l of layers) {
     const grad = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
-    grad.addColorStop(0, l.color);
+    grad.addColorStop(0, rgba(l.color, 0.9));
+    grad.addColorStop(0.4, rgba(l.color, 0.4));
     grad.addColorStop(1, "transparent");
     ctx.globalAlpha = l.alpha;
     ctx.fillStyle = grad;
@@ -59,63 +76,85 @@ function drawIcon(ctx, size, maskable = false) {
 
   ctx.globalAlpha = 1;
 
-  // Crescent moon
-  const moonScale = maskable ? 0.28 : 0.32;
+  // Crescent moon — centered and prominent
+  const moonScale = maskable ? 0.24 : 0.28;
   const moonR = size * moonScale;
-  const moonCx = cx - size * 0.02;
-  const moonCy = cy - size * 0.08;
-  const shadowOffset = moonR * 0.55;
+  const moonCx = cx;
+  const moonCy = cy - size * 0.06;
+  const shadowOffset = moonR * 0.5;
 
-  // Draw full circle (moon body)
+  // Subtle moon glow
+  const moonGlow = ctx.createRadialGradient(
+    moonCx, moonCy, moonR * 0.8,
+    moonCx, moonCy, moonR * 1.6
+  );
+  moonGlow.addColorStop(0, "rgba(245, 247, 255, 0.15)");
+  moonGlow.addColorStop(1, "transparent");
+  ctx.fillStyle = moonGlow;
+  ctx.fillRect(0, 0, size, size);
+
+  // Moon body
   ctx.beginPath();
   ctx.arc(moonCx, moonCy, moonR, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(245, 247, 255, 0.92)";
+  ctx.fillStyle = "rgba(245, 247, 255, 0.95)";
   ctx.fill();
 
-  // Cut out crescent shadow
+  // Crescent cutout
   ctx.beginPath();
-  ctx.arc(moonCx + shadowOffset, moonCy - shadowOffset * 0.3, moonR * 0.85, 0, Math.PI * 2);
-  ctx.fillStyle = BG;
+  ctx.arc(
+    moonCx + shadowOffset,
+    moonCy - shadowOffset * 0.25,
+    moonR * 0.82,
+    0,
+    Math.PI * 2
+  );
+  // Fill cutout with a dark color that shows aurora through
+  const cutoutGrad = ctx.createRadialGradient(
+    moonCx + shadowOffset, moonCy - shadowOffset * 0.25, 0,
+    moonCx + shadowOffset, moonCy - shadowOffset * 0.25, moonR * 0.82
+  );
+  cutoutGrad.addColorStop(0, "#12122a");
+  cutoutGrad.addColorStop(1, "#0c0c18");
+  ctx.fillStyle = cutoutGrad;
   ctx.fill();
 
-  // Re-draw aurora glow over the shadow to blend
-  for (const l of layers.slice(0, 2)) {
+  // Aurora bleed into the cutout area (makes it look more integrated)
+  for (const l of layers.slice(0, 3)) {
     const grad = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r);
-    grad.addColorStop(0, l.color);
+    grad.addColorStop(0, rgba(l.color, 0.6));
     grad.addColorStop(1, "transparent");
-    ctx.globalAlpha = l.alpha * 0.3;
+    ctx.globalAlpha = l.alpha * 0.25;
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.arc(moonCx + shadowOffset, moonCy - shadowOffset * 0.3, moonR * 0.85, 0, Math.PI * 2);
+    ctx.arc(
+      moonCx + shadowOffset,
+      moonCy - shadowOffset * 0.25,
+      moonR * 0.82,
+      0,
+      Math.PI * 2
+    );
     ctx.fill();
   }
 
   ctx.globalAlpha = 1;
 
-  // "M" letter below the moon
-  const fontSize = maskable ? size * 0.14 : size * 0.16;
-  ctx.font = `bold ${fontSize}px sans-serif`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  // Gradient-like text effect (simplified — use solid accent)
-  ctx.fillStyle = "rgba(245, 247, 255, 0.85)";
-  ctx.fillText("M", cx, cy + moonR + fontSize * 0.75);
-
-  // Subtle star dots
-  ctx.fillStyle = "rgba(245, 247, 255, 0.6)";
+  // Star dots — brighter and bigger
+  const starColor = "rgba(245, 247, 255, 0.85)";
   const stars = [
-    { x: 0.15, y: 0.12, r: 1.5 },
-    { x: 0.82, y: 0.18, r: 1.2 },
-    { x: 0.9, y: 0.4, r: 1.0 },
-    { x: 0.12, y: 0.55, r: 1.3 },
-    { x: 0.88, y: 0.65, r: 0.9 },
-    { x: 0.25, y: 0.88, r: 1.1 },
-    { x: 0.72, y: 0.9, r: 1.0 },
+    { x: 0.14, y: 0.13, r: 2.2 },
+    { x: 0.84, y: 0.15, r: 1.8 },
+    { x: 0.92, y: 0.42, r: 1.5 },
+    { x: 0.10, y: 0.52, r: 1.8 },
+    { x: 0.90, y: 0.68, r: 1.3 },
+    { x: 0.18, y: 0.85, r: 1.6 },
+    { x: 0.78, y: 0.88, r: 1.4 },
+    { x: 0.50, y: 0.08, r: 1.3 },
+    { x: 0.35, y: 0.92, r: 1.2 },
   ];
 
+  ctx.fillStyle = starColor;
   for (const s of stars) {
-    const sr = (s.r / 512) * size;
+    const sr = (s.r / 512) * size * 1.5;
     ctx.beginPath();
     ctx.arc(s.x * size, s.y * size, sr, 0, Math.PI * 2);
     ctx.fill();
@@ -133,6 +172,7 @@ function generateIcon(size, filename, maskable = false) {
 }
 
 console.log("Generating Moonmood PWA icons...");
+generateIcon(180, "icon-180x180.png", false);
 generateIcon(192, "icon-192x192.png", false);
 generateIcon(512, "icon-512x512.png", false);
 generateIcon(512, "icon-maskable-512x512.png", true);
