@@ -173,6 +173,11 @@ export async function getTodayLog(): Promise<MoodLog | null> {
   }
 }
 
+export async function clearAllLocalData(): Promise<void> {
+  await db.dailyLogs.clear();
+  localStorage.removeItem(LOCAL_STORAGE_KEY);
+}
+
 export async function getAllLogs(): Promise<MoodLog[]> {
   try {
     const dexieLogs = await db.dailyLogs.orderBy("createdAt").reverse().toArray();
