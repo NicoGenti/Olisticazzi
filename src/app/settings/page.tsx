@@ -4,8 +4,11 @@ import { useCallback } from "react";
 import Link from "next/link";
 
 import { clearAllLocalData } from "@/services/db";
+import { useSettings } from "@/hooks/useSettings";
 
 export default function SettingsPage() {
+  const sticazziEnabled = useSettings((state) => state.sticazziEnabled);
+  const toggleSticazzi = useSettings((state) => state.toggleSticazzi);
   const handleClearData = useCallback(async () => {
     const confirmed = window.confirm(
       "Sei sicuro di voler cancellare tutti i dati locali? Questa azione è irreversibile."
@@ -60,6 +63,38 @@ export default function SettingsPage() {
           <polyline points="9 18 15 12 9 6" />
         </svg>
       </Link>
+
+      {/* Contenuto */}
+      <section className="glass rounded-2xl p-5 space-y-3">
+        <h2
+          className="text-sm font-semibold uppercase tracking-wider"
+          style={{ color: "rgba(245,247,255,0.4)" }}
+        >
+          Contenuto
+        </h2>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+            Sticazzi
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={sticazziEnabled}
+            onClick={toggleSticazzi}
+            className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
+            style={{
+              background: sticazziEnabled ? "var(--accent-violet)" : "rgba(245,247,255,0.15)",
+            }}
+          >
+            <span
+              className="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform"
+              style={{
+                transform: sticazziEnabled ? "translateX(24px)" : "translateX(2px)",
+              }}
+            />
+          </button>
+        </div>
+      </section>
 
       {/* Clear data */}
       <section className="glass rounded-2xl p-5 space-y-3">

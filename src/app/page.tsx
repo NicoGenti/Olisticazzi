@@ -6,6 +6,7 @@ import { useDailySession } from "@/hooks/useDailySession";
 import { getMoodLevel, getGreeting } from "@/lib/moodConfig";
 import { MoodHistory } from "@/components/mood/MoodHistory";
 import { EcoDelGiorno } from "@/components/home/EcoDelGiorno";
+import { SticazziCard } from "@/components/home/SticazziCard";
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -114,12 +115,17 @@ export default function Home() {
             )}
            </motion.div>
 
-           {/* Eco del Giorno */}
-           <motion.div variants={fadeUp}>
-             <EcoDelGiorno />
-           </motion.div>
+          {/* Eco del Giorno */}
+          <motion.div variants={fadeUp}>
+            <EcoDelGiorno />
+          </motion.div>
 
-           {/* Oracle CTA */}
+          {/* Sticazzi */}
+          <motion.div variants={fadeUp}>
+            <SticazziCard />
+          </motion.div>
+
+          {/* Oracle CTA */}
           <motion.div variants={fadeUp}>
             <Link href="/oracle">
               <div

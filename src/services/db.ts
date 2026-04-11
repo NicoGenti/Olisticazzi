@@ -1,6 +1,7 @@
 import Dexie, { type Table } from "dexie";
 import { z } from "zod";
 
+import type { FavoriteEntry, FavoriteType } from "@/types/oracle";
 import type { MoodEntry, MoodLog } from "@/types/mood";
 
 const LOCAL_STORAGE_KEY = "moonmood_logs";
@@ -21,6 +22,7 @@ const storedMoodLogSchema = moodLogSchema.extend({
 
 class MoonmoodDB extends Dexie {
   dailyLogs!: Table<MoodLog>;
+  favorites!: Table<FavoriteEntry>;
 
   constructor() {
     super("MoonmoodDB");
@@ -29,6 +31,10 @@ class MoonmoodDB extends Dexie {
     });
     this.version(2).stores({
       dailyLogs: "id, date, createdAt, moonPhase, oracleCardId",
+    });
+    this.version(3).stores({
+      dailyLogs: "id, date, createdAt, moonPhase, oracleCardId",
+      favorites: "id, type, contentId, savedAt",
     });
   }
 }
@@ -173,11 +179,6 @@ export async function getTodayLog(): Promise<MoodLog | null> {
   }
 }
 
-export async function clearAllLocalData(): Promise<void> {
-  await db.dailyLogs.clear();
-  localStorage.removeItem(LOCAL_STORAGE_KEY);
-}
-
 export async function getAllLogs(): Promise<MoodLog[]> {
   try {
     const dexieLogs = await db.dailyLogs.orderBy("createdAt").reverse().toArray();
@@ -189,4 +190,46 @@ export async function getAllLogs(): Promise<MoodLog[]> {
   } catch {
     return readLocalStorageLogs().sort((a, b) => b.createdAt - a.createdAt);
   }
+}
+
+export async function addFavorite(
+  type: FavoriteType,
+  contentId: string,
+): Promise<FavoriteEntry> {
+  const id = crypto.randomUUID();
+  const entry: FavoriteEntry = {
+    id,
+    type,
+    contentId,
+    savedAt: Date.now(),
+  };
+  await db.favorites.add(entry);
+  return entry;
+}
+
+export async function removeFavorite(
+  type: FavoriteType,
+  contentId: string,
+): Promise<void> {
+  await db.favorites.where({ type, contentId }).delete();
+}
+
+export async function isFavorite(
+  type: FavoriteType,
+  contentId: string,
+): Promise<boolean> {
+  const count = await db.favorites
+    .where({ type, contentId })
+    .count();
+  return count > 0;
+}
+
+export async function getAllFavorites(): Promise<FavoriteEntry[]> {
+  return db.favorites.orderBy("savedAt").reverse().toArray();
+}
+
+export async function clearAllLocalData(): Promise<void> {
+  await db.dailyLogs.clear();
+  await db.favorites.clear();
+  localStorage.removeItem(LOCAL_STORAGE_KEY);
 }

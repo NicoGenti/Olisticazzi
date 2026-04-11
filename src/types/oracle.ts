@@ -22,6 +22,11 @@ export interface AphorismEntry {
   text: string; // Italian aphorism
 }
 
+export interface SticazziEntry {
+  id: string;
+  text: string; // Italian ironic/humorous phrase
+}
+
 export type MoodTrend = "rising" | "falling" | "stable";
 
 export interface OracleSelectionInput {
@@ -33,4 +38,13 @@ export interface OracleSelectionInput {
 export interface OracleSelectionResult {
   card: OracleCard;
   remedy: Remedy;
+}
+
+export type FavoriteType = "oracle" | "aphorism" | "sticazzi";
+
+export interface FavoriteEntry {
+  id: string;
+  type: FavoriteType;
+  contentId: string;
+  savedAt: number;
 }
