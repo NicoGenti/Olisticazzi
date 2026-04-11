@@ -55,7 +55,7 @@
       "^@/(.*)$": "<rootDir>/src/$1",
       "\\.module\\.css$": "<rootDir>/src/__mocks__/styleMock.js"
     },
-    "setupFilesAfterFramework": [
+    "setupFilesAfterEnv": [
       "@testing-library/jest-dom"
     ]
   }
