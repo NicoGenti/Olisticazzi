@@ -118,6 +118,7 @@ export default function MoodChart({ logs, range }: MoodChartProps) {
             const x = PADDING_X + gap + i * (barW + gap);
             const barH = (Number(log.moodScore) / Y_MAX) * innerHeight;
             const y = PADDING_Y_TOP + innerHeight - barH;
+            const barCenterY = y + barH / 2;
             const level = getMoodLevel(Number(log.moodScore));
 
             return (
@@ -137,9 +138,9 @@ export default function MoodChart({ logs, range }: MoodChartProps) {
                   delay: i * 0.05,
                   ease: "easeOut",
                 }}
-                onHoverStart={() => setTooltip({ log, x: x + barW / 2, y })}
+                onHoverStart={() => setTooltip({ log, x: x + barW / 2, y: barCenterY })}
                 onHoverEnd={() => setTooltip(null)}
-                onPointerDown={() => setTooltip({ log, x: x + barW / 2, y })}
+                onPointerDown={() => setTooltip({ log, x: x + barW / 2, y: barCenterY })}
                 onPointerUp={() => setTooltip(null)}
                 style={{ cursor: "pointer" }}
               />
@@ -174,7 +175,7 @@ export default function MoodChart({ logs, range }: MoodChartProps) {
               >
                 <rect
                   x={Math.min(Math.max(tooltip.x, 40), chartWidth - 80) - 36}
-                  y={Math.max(tooltip.y - 52, 4)}
+                  y={Math.max(tooltip.y - 22, 4)}
                   width={72}
                   height={44}
                   rx={8}
@@ -184,7 +185,7 @@ export default function MoodChart({ logs, range }: MoodChartProps) {
                 />
                 <text
                   x={Math.min(Math.max(tooltip.x, 40), chartWidth - 80)}
-                  y={Math.max(tooltip.y - 52, 4) + 17}
+                  y={Math.max(tooltip.y - 22, 4) + 17}
                   textAnchor="middle"
                   fill={getMoodLevel(Number(tooltip.log.moodScore)).color}
                   fontSize={13}
@@ -195,7 +196,7 @@ export default function MoodChart({ logs, range }: MoodChartProps) {
                 </text>
                 <text
                   x={Math.min(Math.max(tooltip.x, 40), chartWidth - 80)}
-                  y={Math.max(tooltip.y - 52, 4) + 34}
+                  y={Math.max(tooltip.y - 22, 4) + 34}
                   textAnchor="middle"
                   fill="rgba(245,247,255,0.7)"
                   fontSize={9}
