@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useDailySession } from "@/hooks/useDailySession";
+import { useEcoEnabled } from "@/hooks/useSettings";
 import { getMoodLevel, getGreeting } from "@/lib/moodConfig";
 import { MoodHistory } from "@/components/mood/MoodHistory";
 import { EcoDelGiorno } from "@/components/home/EcoDelGiorno";
@@ -24,6 +25,7 @@ const fadeUp = {
 export default function Home() {
   const { sessionState } = useDailySession();
   const greeting = getGreeting();
+  const ecoEnabled = useEcoEnabled();
 
   return (
     <AnimatePresence mode="wait">
@@ -116,9 +118,11 @@ export default function Home() {
            </motion.div>
 
           {/* Eco del Giorno */}
-          <motion.div variants={fadeUp}>
-            <EcoDelGiorno />
-          </motion.div>
+          {ecoEnabled && (
+            <motion.div variants={fadeUp}>
+              <EcoDelGiorno />
+            </motion.div>
+          )}
 
           {/* Sticazzi */}
           <motion.div variants={fadeUp}>
