@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { dedupeDailyLogs } from "@/services/db";
 
 export function ServiceWorkerRegistrar() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -10,6 +11,8 @@ export function ServiceWorkerRegistrar() {
   );
 
   useEffect(() => {
+    dedupeDailyLogs().catch(() => { /* non-fatal */ });
+
     if (!("serviceWorker" in navigator)) return;
 
     navigator.serviceWorker

@@ -1,8 +1,9 @@
 import type { MoodLog } from "@/types/mood";
 import type { MoodTrend } from "@/types/oracle";
 import { calculateMoodTrend } from "@/services/moodTrend";
+import type { Range } from "@/types/report";
 
-export type Range = "7" | "30" | "90" | "all";
+export type { Range };
 
 export interface ReportStats {
   totalLogs: number;

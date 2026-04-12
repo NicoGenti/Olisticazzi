@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { describe, beforeEach, expect, it } from "@jest/globals";
 
 import { toMoodScore } from "@/types/mood";
-import { db, dedupeDailyLogs, getAllLogs, getTodayLog, saveMoodLog } from "./db";
+import { db, dedupeDailyLogs, getAllLogs, getRecentLogs, getTodayLog, saveMoodLog } from "./db";
 
 beforeEach(async () => {
   await db.dailyLogs.clear();
@@ -73,6 +73,38 @@ describe("getAllLogs", () => {
 
     expect(logs.length).toBe(2);
     expect(logs[0].createdAt).toBeGreaterThanOrEqual(logs[1].createdAt);
+  });
+});
+
+describe("getRecentLogs", () => {
+  it("returns logs with date strictly before the cutoff", async () => {
+    await saveMoodLog({ date: "2026-01-01", moodScore: toMoodScore(5), createdAt: 1000 });
+    await saveMoodLog({ date: "2026-01-02", moodScore: toMoodScore(6), createdAt: 2000 });
+    await saveMoodLog({ date: "2026-01-03", moodScore: toMoodScore(7), createdAt: 3000 });
+
+    const logs = await getRecentLogs("2026-01-03", 10);
+
+    expect(logs.map((l) => l.date)).not.toContain("2026-01-03");
+    expect(logs.map((l) => l.date)).toContain("2026-01-02");
+    expect(logs.map((l) => l.date)).toContain("2026-01-01");
+  });
+
+  it("respects the limit parameter", async () => {
+    await saveMoodLog({ date: "2026-01-01", moodScore: toMoodScore(5), createdAt: 1000 });
+    await saveMoodLog({ date: "2026-01-02", moodScore: toMoodScore(6), createdAt: 2000 });
+    await saveMoodLog({ date: "2026-01-03", moodScore: toMoodScore(7), createdAt: 3000 });
+
+    const logs = await getRecentLogs("2026-01-10", 2);
+
+    expect(logs).toHaveLength(2);
+  });
+
+  it("returns empty array when no logs exist before cutoff", async () => {
+    await saveMoodLog({ date: "2026-01-05", moodScore: toMoodScore(5), createdAt: 1000 });
+
+    const logs = await getRecentLogs("2026-01-05", 10);
+
+    expect(logs).toHaveLength(0);
   });
 });
 

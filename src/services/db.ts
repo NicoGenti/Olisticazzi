@@ -1,6 +1,8 @@
 import Dexie, { type Table } from "dexie";
 import { z } from "zod";
 
+import { getTodayDateString } from "@/lib/date";
+import type { Range } from "@/types/report";
 import type { FavoriteEntry, FavoriteType } from "@/types/oracle";
 import type { MoodEntry, MoodLog } from "@/types/mood";
 
@@ -36,6 +38,31 @@ class MoonmoodDB extends Dexie {
       dailyLogs: "id, date, createdAt, moonPhase, oracleCardId",
       favorites: "id, type, contentId, savedAt",
     });
+    this.version(4)
+      .stores({
+        dailyLogs: "id, date, createdAt, moonPhase, oracleCardId",
+        favorites: "id, &[type+contentId], savedAt",
+      })
+      .upgrade(async (tx) => {
+        // Remove duplicate [type+contentId] pairs before adding the unique index.
+        // Keep the entry with the highest savedAt for each pair.
+        const all = await tx.table<FavoriteEntry>("favorites").toArray();
+        const seen = new Map<string, string>();
+        const toDelete: string[] = [];
+
+        for (const fav of [...all].sort((a, b) => b.savedAt - a.savedAt)) {
+          const key = `${fav.type}:${fav.contentId}`;
+          if (seen.has(key)) {
+            toDelete.push(fav.id);
+          } else {
+            seen.set(key, fav.id);
+          }
+        }
+
+        if (toDelete.length > 0) {
+          await tx.table("favorites").bulkDelete(toDelete);
+        }
+      });
   }
 }
 
@@ -63,10 +90,6 @@ function dedupeByDate(logs: MoodLog[]): { deduped: MoodLog[]; removedCount: numb
   }
 
   return { deduped, removedCount };
-}
-
-function getTodayDateString(): string {
-  return new Date().toLocaleDateString("sv-SE");
 }
 
 function readLocalStorageLogs(): MoodLog[] {
@@ -192,18 +215,95 @@ export async function getAllLogs(): Promise<MoodLog[]> {
   }
 }
 
+export async function getRecentLogs(before: string, limit: number): Promise<MoodLog[]> {
+  try {
+    const logs = await db.dailyLogs
+      .where("date")
+      .below(before)
+      .reverse()
+      .limit(limit)
+      .toArray();
+    if (logs.length > 0) return logs;
+    return readLocalStorageLogs()
+      .filter((l) => l.date < before)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, limit);
+  } catch {
+    return readLocalStorageLogs()
+      .filter((l) => l.date < before)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, limit);
+  }
+}
+
+export async function getLogsPage(offset: number, limit: number): Promise<MoodLog[]> {
+  try {
+    return await db.dailyLogs
+      .orderBy("createdAt")
+      .reverse()
+      .offset(offset)
+      .limit(limit)
+      .toArray();
+  } catch {
+    const all = readLocalStorageLogs().sort((a, b) => b.createdAt - a.createdAt);
+    return all.slice(offset, offset + limit);
+  }
+}
+
+export async function getLogsCount(): Promise<number> {
+  try {
+    return await db.dailyLogs.count();
+  } catch {
+    return readLocalStorageLogs().length;
+  }
+}
+
+export async function getLogsForRange(range: Range): Promise<MoodLog[]> {
+  if (range === "all") {
+    return getAllLogs();
+  }
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - parseInt(range, 10));
+  cutoff.setHours(0, 0, 0, 0);
+  const cutoffStr = cutoff.toLocaleDateString("sv-SE");
+  try {
+    const logs = await db.dailyLogs
+      .where("date")
+      .aboveOrEqual(cutoffStr)
+      .reverse()
+      .toArray();
+    if (logs.length > 0) return logs;
+    return readLocalStorageLogs()
+      .filter((l) => l.date >= cutoffStr)
+      .sort((a, b) => b.date.localeCompare(a.date));
+  } catch {
+    return readLocalStorageLogs()
+      .filter((l) => l.date >= cutoffStr)
+      .sort((a, b) => b.date.localeCompare(a.date));
+  }
+}
+
 export async function addFavorite(
   type: FavoriteType,
   contentId: string,
 ): Promise<FavoriteEntry> {
-  const id = crypto.randomUUID();
   const entry: FavoriteEntry = {
-    id,
+    id: crypto.randomUUID(),
     type,
     contentId,
     savedAt: Date.now(),
   };
-  await db.favorites.add(entry);
+  try {
+    await db.favorites.add(entry);
+  } catch (err) {
+    if (err instanceof Dexie.ConstraintError) {
+      // Unique constraint violation — entry already exists, return the existing one
+      const existing = await db.favorites.where({ type, contentId }).first();
+      if (existing) return existing;
+    } else {
+      throw err;
+    }
+  }
   return entry;
 }
 

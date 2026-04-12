@@ -3,15 +3,15 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { getAllLogs } from "@/services/db";
+import { getLogsForRange } from "@/services/db";
 import { getMoodLevel } from "@/lib/moodConfig";
 import type { MoodLog } from "@/types/mood";
 import FilterBar from "@/components/report/FilterBar";
 import MoodChart from "@/components/report/MoodChart";
 import ChartErrorBoundary from "@/components/report/ChartErrorBoundary";
-import { filterLogsByRange, computeStatsForRange } from "@/services/reportStats";
+import { computeStatsForRange } from "@/services/reportStats";
 import type { ReportStats } from "@/services/reportStats";
-import type { Range } from "@/components/report/MoodChart";
+import type { Range } from "@/types/report";
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -106,14 +106,14 @@ function ReportContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    void getAllLogs().then((logs) => {
-      setAllLogs(logs);
-      setIsLoading(false);
-    });
-  }, []);
+    setIsLoading(true);
+    void getLogsForRange(range)
+      .then((logs) => { setAllLogs(logs); })
+      .catch(() => { setAllLogs([]); })
+      .finally(() => { setIsLoading(false); });
+  }, [range]);
 
-  const filteredLogs = filterLogsByRange(allLogs, range);
-  const stats = computeStatsForRange(filteredLogs);
+  const stats = computeStatsForRange(allLogs);
 
   const rangeLabel = range === "all" ? "Tutto" : `${range} giorni`;
 
@@ -218,7 +218,7 @@ function ReportContent() {
                 Andamento umore — {rangeLabel}
               </p>
               <ChartErrorBoundary>
-                <MoodChart logs={filteredLogs} range={range} />
+                <MoodChart logs={allLogs} range={range} />
               </ChartErrorBoundary>
             </div>
           </motion.div>

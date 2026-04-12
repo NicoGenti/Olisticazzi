@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAllLogs } from "@/services/db";
+import { useEffect, useState, useCallback } from "react";
+import { getLogsPage, getLogsCount } from "@/services/db";
 import oracleCards from "@/data/oracle_seed.json";
 import { buildMoodHistoryPage } from "@/hooks/moodHistoryViewModel";
 import type { HistoryMonthGroup } from "@/types/history";
@@ -27,29 +27,52 @@ export interface UseMoodHistoryReturn {
 
 export function useMoodHistory(limit?: number): UseMoodHistoryReturn {
   const [logs, setLogs] = useState<MoodLog[]>([]);
-  const [visibleCount, setVisibleCount] = useState(limit ?? PAGE_SIZE);
+  const [offset, setOffset] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    void getAllLogs()
-      .then((allLogs) => {
-        setLogs(allLogs);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  const pageSize = limit ?? PAGE_SIZE;
 
-  const page = buildMoodHistoryPage(logs, visibleCount, oracleCardsById);
+  // Load a page of logs — on the first page, count and logs are fetched together
+  // to avoid the race condition where hasMore = false before count resolves
+  const loadPage = useCallback(
+    async (currentOffset: number) => {
+      setIsLoading(true);
+      try {
+        if (currentOffset === 0) {
+          const [page, count] = await Promise.all([
+            getLogsPage(0, pageSize),
+            getLogsCount(),
+          ]);
+          setTotalCount(count);
+          setLogs(page);
+        } else {
+          const page = await getLogsPage(currentOffset, pageSize);
+          setLogs((prev) => [...prev, ...page]);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [pageSize]
+  );
+
+  useEffect(() => {
+    void loadPage(offset);
+  }, [offset, loadPage]);
+
+  const page = buildMoodHistoryPage(logs, logs.length, oracleCardsById);
 
   function loadMore() {
-    setVisibleCount((previous) => previous + PAGE_SIZE);
+    setOffset((prev) => prev + pageSize);
   }
+
+  const hasMore = logs.length < totalCount;
 
   return {
     groups: page.groups,
-    hasMore: page.hasMore,
-    totalCount: page.totalCount,
+    hasMore,
+    totalCount,
     isLoading,
     loadMore,
   };

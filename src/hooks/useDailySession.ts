@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 
 import { useMoodScore, useSetMoodScore } from "@/hooks/useMoodStore";
 import { buildDailySessionSavePayload } from "@/hooks/dailySessionSavePayload";
-import { getTodayLog, saveMoodLog, getAllLogs } from "@/services/db";
+import { getTodayLog, saveMoodLog, getRecentLogs } from "@/services/db";
+import { getTodayDateString } from "@/lib/date";
 import { getMoonPhase } from "@/services/moonPhase";
 import { calculateMoodTrend } from "@/services/moodTrend";
 import { selectOracle } from "@/services/oracleEngine";
@@ -29,10 +30,6 @@ export interface UseDailySessionReturn {
   setNote: (note: string) => void;
   saveLog: () => Promise<void>;
   enterEditMode: () => void;
-}
-
-function getTodayDateString(): string {
-  return new Date().toLocaleDateString("sv-SE");
 }
 
 export function useDailySession(): UseDailySessionReturn {
@@ -63,49 +60,39 @@ export function useDailySession(): UseDailySessionReturn {
     try {
       const today = getTodayDateString();
 
-      // Step 1: Save the base mood log
-      const savedLog = await saveMoodLog(
-        buildDailySessionSavePayload({
+      // Pre-calculate oracle data before writing to DB (DB-01: single write, DB-02: targeted query)
+      // Non-fatal: if oracle computation fails, mood is still saved without oracle data
+      let oracleData:
+        | { moonPhase: ReturnType<typeof getMoonPhase>; oracleCardId: string; oracleRemedyId: string }
+        | undefined;
+
+      try {
+        const moonPhase = getMoonPhase(new Date());
+        const recentLogs = await getRecentLogs(today, 30);
+        const trend = calculateMoodTrend(recentLogs, moodScore);
+        const result = selectOracle({ moodScore, moonPhase, trend }, oracleCards, remedies);
+        oracleData = { moonPhase, oracleCardId: result.card.id, oracleRemedyId: result.remedy.id };
+      } catch (oracleError) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Errore durante la selezione dell'oracolo", oracleError);
+        }
+        // non-fatal: navigate to oracle page anyway (it will show graceful fallback)
+      }
+
+      // Single atomic write — includes oracle data when available
+      const savedLog = await saveMoodLog({
+        ...buildDailySessionSavePayload({
           sessionState,
           date: today,
           moodScore,
           note,
         }),
-      );
+        ...oracleData,
+      });
 
       setSessionState({ status: "saved", log: savedLog });
       setNote(savedLog.note ?? "");
 
-      // Step 2: Run oracle engine and re-save with oracle data
-      try {
-        // Calculate moon phase for today
-        const moonPhase = getMoonPhase(new Date());
-
-        // Get all logs for trend calculation — filter out today to use only prior days
-        const allLogs = await getAllLogs();
-        const recentLogs = allLogs.filter((l) => l.date < today);
-
-        // Calculate mood trend
-        const trend = calculateMoodTrend(recentLogs, moodScore);
-
-        // Select oracle card + remedy
-        const result = selectOracle({ moodScore, moonPhase, trend }, oracleCards, remedies);
-
-        // Re-save the log with oracle data attached
-        await saveMoodLog({
-          ...savedLog,
-          moonPhase,
-          oracleCardId: result.card.id,
-          oracleRemedyId: result.remedy.id,
-        });
-      } catch (oracleError) {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Errore durante la selezione dell'oracolo", oracleError);
-        }
-        // Non-fatal: navigate to oracle page anyway (it will show graceful fallback)
-      }
-
-      // Step 3: Navigate to oracle page
       router.push("/oracle");
     } catch (error) {
       if (process.env.NODE_ENV !== "production") {

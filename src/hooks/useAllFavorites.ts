@@ -1,33 +1,34 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { getAllFavorites } from "@/services/db";
+import { useState, useEffect } from "react";
+import { liveQuery } from "dexie";
+import { db } from "@/services/db";
 import type { FavoriteEntry } from "@/types/oracle";
 
 interface UseAllFavoritesResult {
   favorites: FavoriteEntry[];
   loading: boolean;
-  refetch: () => void;
 }
 
 export function useAllFavorites(): UseAllFavoritesResult {
   const [favorites, setFavorites] = useState<FavoriteEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadFavorites = useCallback(async () => {
-    try {
-      const result = await getAllFavorites();
-      setFavorites(result);
-    } catch {
-      setFavorites([]);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    const subscription = liveQuery(() =>
+      db.favorites.orderBy("savedAt").reverse().toArray()
+    ).subscribe({
+      next: (result) => {
+        setFavorites(result);
+        setLoading(false);
+      },
+      error: () => {
+        setFavorites([]);
+        setLoading(false);
+      },
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    loadFavorites();
-  }, [loadFavorites]);
-
-  return { favorites, loading, refetch: loadFavorites };
+  return { favorites, loading };
 }

@@ -31,17 +31,17 @@ export function useFavorite(
   const toggle = useCallback(async () => {
     if (!contentId) return;
     setAnimating(true);
-    if (favorited) {
-      await removeFavorite(type, contentId);
-      setFavorited(false);
-    } else {
-      const already = await isFavorite(type, contentId);
-      if (!already) {
+    try {
+      if (favorited) {
+        await removeFavorite(type, contentId);
+        setFavorited(false);
+      } else {
         await addFavorite(type, contentId);
+        setFavorited(true);
       }
-      setFavorited(true);
+    } finally {
+      setTimeout(() => setAnimating(false), 300);
     }
-    setTimeout(() => setAnimating(false), 300);
   }, [favorited, type, contentId]);
 
   return { favorited, toggle, animating };

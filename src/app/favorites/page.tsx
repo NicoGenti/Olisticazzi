@@ -24,7 +24,7 @@ const TYPE_LABELS: Record<string, { label: string; emoji: string }> = {
 const TYPE_ORDER = ["oracle", "aphorism", "sticazzi"];
 
 export default function FavoritesPage() {
-  const { favorites, loading, refetch } = useAllFavorites();
+  const { favorites, loading } = useAllFavorites();
 
   const grouped = useMemo(() => {
     const groups: Record<string, FavoriteEntry[]> = {};
@@ -37,7 +37,7 @@ export default function FavoritesPage() {
 
   const handleRemove = async (type: FavoriteEntry["type"], contentId: string) => {
     await removeFavorite(type, contentId);
-    refetch();
+    // live query updates the UI automatically
   };
 
   if (loading) {

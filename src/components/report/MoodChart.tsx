@@ -6,7 +6,7 @@ import { getMoodLevel } from "@/lib/moodConfig";
 import type { MoodLog } from "@/types/mood";
 import styles from "./MoodChart.module.css";
 
-export type Range = "7" | "30" | "90" | "all";
+import type { Range } from "@/types/report";
 
 interface MoodChartProps {
   logs: MoodLog[];
