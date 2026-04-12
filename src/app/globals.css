@@ -34,7 +34,7 @@
   --radius-sm: 10px;
 
   /* Spacing vertical safe area */
-  --nav-height: 68px;
+  --nav-height: 80px;
 
   /* Mood color scale (HSL format for easy manipulation) */
   --mood-low: 0, 100%, 50%;

@@ -114,7 +114,7 @@ export function BottomNav() {
 
       <nav
         className="glass-nav fixed bottom-0 left-0 right-0 z-50"
-        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+        style={{ paddingBottom: "calc(12px + env(safe-area-inset-bottom, 0px))" }}
         aria-label="Navigazione principale"
       >
         <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">
