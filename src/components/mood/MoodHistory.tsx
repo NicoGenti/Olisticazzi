@@ -12,8 +12,12 @@ function formatDateIt(date: string): string {
   });
 }
 
-export function MoodHistory() {
-  const { groups, hasMore, loadMore, isLoading } = useMoodHistory();
+interface MoodHistoryProps {
+  limit?: number;
+}
+
+export function MoodHistory({ limit }: MoodHistoryProps) {
+  const { groups, hasMore, loadMore, isLoading } = useMoodHistory(limit);
 
   if (isLoading) {
     return null;
@@ -28,10 +32,10 @@ export function MoodHistory() {
           border: "1px solid var(--glass-border-soft)",
         }}
       >
-        <p className="text-base font-semibold" style={{ color: "rgba(245,247,255,0.85)" }}>
+        <p className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
           Le tue memorie stanno aspettando.
         </p>
-        <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+        <p className="text-sm text-subtle">
           Ogni nota salvata ti aiuta a riconoscere il tuo ritmo interiore.
         </p>
         <Link
@@ -40,7 +44,7 @@ export function MoodHistory() {
           style={{
             border: "1px solid var(--glass-border-soft)",
             background: "var(--glass-bg-soft)",
-            color: "rgba(245,247,255,0.75)",
+            color: "var(--text-light)",
           }}
         >
           Torna a registrare l&apos;umore
@@ -61,8 +65,7 @@ export function MoodHistory() {
             className="space-y-2"
           >
             <h2
-              className="text-xs font-semibold uppercase tracking-wider"
-              style={{ color: "rgba(245,247,255,0.4)" }}
+              className="text-xs font-semibold uppercase tracking-wider text-muted"
             >
               {group.monthLabelIt}
             </h2>
@@ -80,15 +83,15 @@ export function MoodHistory() {
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <p className="text-sm" style={{ color: "rgba(245,247,255,0.9)" }}>
+                      <p className="text-sm" style={{ color: "var(--text-primary)" }}>
                         {formatDateIt(item.date)}
                       </p>
-                      <p className="truncate text-xs mt-0.5" style={{ color: "rgba(245,247,255,0.5)" }}>
+                      <p className="truncate text-xs mt-0.5 text-subtle">
                         {item.oracleCardName}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2 text-sm" style={{ color: "rgba(245,247,255,0.8)" }}>
+                    <div className="flex items-center gap-2 text-sm text-light">
                       <span>{item.scoreEmoji}</span>
                       <span className="font-medium">{item.moodScore}/10</span>
                       <span
@@ -105,15 +108,14 @@ export function MoodHistory() {
         ))}
       </div>
 
-      {hasMore && (
+      {hasMore && !limit && (
         <button
           type="button"
           onClick={loadMore}
-          className="w-full rounded-full py-2.5 text-sm transition"
+          className="w-full rounded-full py-2.5 text-sm transition text-body"
           style={{
             border: "1px solid var(--glass-border-soft)",
             background: "var(--glass-bg-soft)",
-            color: "rgba(245,247,255,0.7)",
           }}
         >
           Carica altre memorie

@@ -46,7 +46,7 @@ function MetricCard({ label, value, icon, color }: MetricCardProps) {
       style={{ boxShadow: `0 0 18px ${color}18` }}
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs" style={{ color: "rgba(245,247,255,0.45)" }}>{label}</span>
+        <span className="text-xs text-muted">{label}</span>
         <span className="text-base">{icon}</span>
       </div>
       <p className="text-xl font-bold font-display" style={{ color }}>
@@ -87,10 +87,10 @@ function InsightCard({ stats }: { stats: ReportStats }) {
     >
       <span className="text-2xl flex-shrink-0">{icon}</span>
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "rgba(245,247,255,0.4)" }}>
+        <p className="text-xs font-semibold uppercase tracking-wider mb-1 text-muted">
           Insight
         </p>
-        <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.75)" }}>
+        <p className="text-sm leading-relaxed text-light">
           {insight}
         </p>
       </div>
@@ -121,8 +121,7 @@ function ReportContent() {
     <main className="flex flex-col gap-4 px-4 pt-10 pb-4">
       <header className="text-center pb-2">
         <p
-          className="text-xs uppercase tracking-[0.18em]"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-xs uppercase tracking-[0.18em] text-muted"
         >
           Statistiche
         </p>
@@ -150,7 +149,7 @@ function ReportContent() {
           <p className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
             Nessun dato disponibile
           </p>
-          <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+          <p className="text-sm text-subtle">
             Inizia a registrare il tuo umore per vedere i tuoi trend qui.
           </p>
         </div>
@@ -164,12 +163,17 @@ function ReportContent() {
           className="flex flex-col gap-4"
         >
           <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
-            <MetricCard
-              label="Umore medio"
-              value={`${stats.avgScore}/10`}
-              icon={getMoodLevel(Math.round(stats.avgScore)).emoji}
-              color={getMoodLevel(Math.round(stats.avgScore)).color}
-            />
+            {(() => {
+              const avgLevel = getMoodLevel(Math.round(stats.avgScore));
+              return (
+                <MetricCard
+                  label="Umore medio"
+                  value={`${stats.avgScore}/10`}
+                  icon={avgLevel.emoji}
+                  color={avgLevel.color}
+                />
+              );
+            })()}
             <MetricCard
               label="Sessioni totali"
               value={String(stats.totalLogs)}
@@ -226,8 +230,7 @@ function ReportContent() {
           <motion.div variants={fadeUp}>
             <div className="glass rounded-2xl p-4 space-y-2">
               <p
-                className="text-xs font-semibold uppercase tracking-wider"
-                style={{ color: "rgba(245,247,255,0.4)" }}
+                className="text-xs font-semibold uppercase tracking-wider text-muted"
               >
                 Legenda umore
               </p>
@@ -240,7 +243,7 @@ function ReportContent() {
                         className="inline-block h-2.5 w-2.5 rounded-full flex-shrink-0"
                         style={{ backgroundColor: level.color }}
                       />
-                      <span className="text-xs" style={{ color: "rgba(245,247,255,0.65)" }}>
+                      <span className="text-xs text-body">
                         {score} — {level.label}
                       </span>
                     </div>
@@ -260,8 +263,7 @@ function Loading() {
     <main className="flex flex-col gap-4 px-4 pt-10 pb-4">
       <header className="text-center pb-2">
         <p
-          className="text-xs uppercase tracking-[0.18em]"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-xs uppercase tracking-[0.18em] text-muted"
         >
           Statistiche
         </p>

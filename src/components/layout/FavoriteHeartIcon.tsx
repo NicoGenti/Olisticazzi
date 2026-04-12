@@ -25,7 +25,7 @@ export function FavoriteHeartIcon({
       style={{
         background: "none",
         border: "none",
-        padding: "4px",
+        padding: "10px",
         cursor: "pointer",
         color: favorited ? "var(--accent-pink)" : "rgba(245,247,255,0.40)",
         fontSize: "1.25rem",

@@ -7,19 +7,8 @@ import { SaveMoodButton } from "@/components/mood/SaveMoodButton";
 import { useDailySession } from "@/hooks/useDailySession";
 import { useMoodScore, useSetMoodScore } from "@/hooks/useMoodStore";
 import { getMoodQuestion, getGreeting, getMoodLevel } from "@/lib/moodConfig";
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.04 },
-  },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] as const } },
-};
+import { staggerContainer, fadeUp } from "@/lib/animations";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 export default function MoodPage() {
   const moodScore = useMoodScore();
@@ -33,21 +22,7 @@ export default function MoodPage() {
   return (
     <AnimatePresence mode="wait">
       {/* Loading state */}
-      {sessionState.status === "loading" && (
-        <motion.main
-          key="loading"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex min-h-screen flex-col items-center justify-center gap-3"
-        >
-          <span className="font-display text-2xl font-bold animate-pulse" style={{ color: "var(--accent-violet)" }}>
-            Moonmood
-          </span>
-          <span className="text-sm" style={{ color: "rgba(245,247,255,0.4)" }}>Caricamento...</span>
-        </motion.main>
-      )}
+      {sessionState.status === "loading" && <LoadingScreen />}
 
       {/* Saved state — show summary and allow editing */}
       {sessionState.status === "saved" && (
@@ -61,7 +36,7 @@ export default function MoodPage() {
         >
           {/* Header */}
           <motion.header variants={fadeUp} className="text-center pb-2">
-            <p className="text-xs uppercase tracking-wider" style={{ color: "rgba(245,247,255,0.4)" }}>
+            <p className="text-xs uppercase tracking-wider text-muted">
               {greeting}
             </p>
             <h1 className="font-display text-2xl font-bold mt-1" style={{ color: "var(--text-primary)" }}>
@@ -77,7 +52,7 @@ export default function MoodPage() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs" style={{ color: "rgba(245,247,255,0.45)" }}>Umore del giorno</p>
+                  <p className="text-xs text-muted">Umore del giorno</p>
                   <p className="text-lg font-semibold mt-0.5" style={{ color: "var(--text-primary)" }}>
                     {getMoodLevel(sessionState.log.moodScore).label}
                   </p>
@@ -98,12 +73,12 @@ export default function MoodPage() {
               </div>
 
               {sessionState.log.note && (
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.65)" }}>
+                <p className="text-sm leading-relaxed text-body">
                   &ldquo;{sessionState.log.note}&rdquo;
                 </p>
               )}
 
-              <p className="text-xs" style={{ color: "rgba(245,247,255,0.35)" }}>
+              <p className="text-xs text-dim">
                 Salvato alle{" "}
                 {new Date(sessionState.log.createdAt).toLocaleTimeString("it-IT", {
                   hour: "2-digit",
@@ -139,7 +114,7 @@ export default function MoodPage() {
         >
           {/* Contextual header */}
           <motion.header variants={fadeUp} className="text-center">
-            <p className="text-xs uppercase tracking-wider" style={{ color: "rgba(245,247,255,0.4)" }}>
+            <p className="text-xs uppercase tracking-wider text-muted">
               {greeting}
             </p>
             <h1 className="font-display text-2xl font-bold mt-1 leading-snug" style={{ color: "var(--text-primary)" }}>
@@ -158,6 +133,8 @@ export default function MoodPage() {
                 transition={{ duration: 0.18 }}
                 className="text-base font-semibold"
                 style={{ color: "var(--text-primary)" }}
+                aria-live="polite"
+                aria-atomic="true"
               >
                 {moodLevel.emoji} {moodLevel.label}
               </motion.p>

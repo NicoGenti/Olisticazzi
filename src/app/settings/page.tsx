@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 
 import { clearAllLocalData } from "@/services/db";
 import { useSettings } from "@/hooks/useSettings";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { Toast } from "@/components/ui/Toast";
 
 const LANGUAGES = [
   { code: "it", label: "Italiano", available: true },
@@ -51,14 +53,18 @@ export default function SettingsPage() {
   const toggleEco = useSettings((state) => state.toggleEco);
   const toggleNotifications = useSettings((state) => state.toggleNotifications);
 
-  const handleClearData = useCallback(async () => {
-    const confirmed = window.confirm(
-      "Sei sicuro di voler cancellare tutti i dati locali? Questa azione è irreversibile."
-    );
-    if (!confirmed) return;
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
-    await clearAllLocalData();
-    window.alert("Dati locali eliminati con successo.");
+  const handleConfirmClear = useCallback(async () => {
+    try {
+      await clearAllLocalData();
+      setShowConfirm(false);
+      setShowToast(true);
+    } catch (err) {
+      console.error("Failed to clear data:", err);
+      setShowConfirm(false);
+    }
   }, []);
 
   return (
@@ -66,8 +72,7 @@ export default function SettingsPage() {
       {/* Header */}
       <header className="text-center pb-2">
         <p
-          className="text-xs uppercase tracking-[0.18em]"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-xs uppercase tracking-[0.18em] text-muted"
         >
           Preferenze
         </p>
@@ -82,8 +87,7 @@ export default function SettingsPage() {
       {/* Lingua */}
       <section className="glass rounded-2xl p-5 space-y-3">
         <h2
-          className="text-sm font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-sm font-semibold uppercase tracking-wider text-muted"
         >
           🌐 Lingua
         </h2>
@@ -94,11 +98,11 @@ export default function SettingsPage() {
               className="flex items-center justify-between rounded-xl px-3 py-2.5"
               style={{
                 background: lang.available
-                  ? "rgba(139,92,246,0.12)"
-                  : "rgba(245,247,255,0.04)",
+                  ? "var(--violet-bg)"
+                  : "var(--disabled-bg)",
                 border: lang.available
-                  ? "1px solid rgba(139,92,246,0.24)"
-                  : "1px solid rgba(245,247,255,0.06)",
+                  ? "1px solid var(--violet-border)"
+                  : "1px solid var(--disabled-border)",
                 opacity: lang.available ? 1 : 0.5,
               }}
             >
@@ -107,7 +111,7 @@ export default function SettingsPage() {
                 style={{
                   color: lang.available
                     ? "var(--text-primary)"
-                    : "rgba(245,247,255,0.4)",
+                    : "var(--text-muted)",
                 }}
               >
                 {lang.label}
@@ -116,9 +120,9 @@ export default function SettingsPage() {
                 <span
                   className="text-xs font-medium px-2 py-0.5 rounded-full"
                   style={{
-                    background: "rgba(139,92,246,0.2)",
+                    background: "var(--violet-bg-strong)",
                     color: "var(--accent-violet)",
-                    border: "1px solid rgba(139,92,246,0.3)",
+                    border: "1px solid var(--violet-border)",
                   }}
                 >
                   Attiva
@@ -127,9 +131,9 @@ export default function SettingsPage() {
                 <span
                   className="text-xs px-2 py-0.5 rounded-full"
                   style={{
-                    background: "rgba(245,247,255,0.06)",
-                    color: "rgba(245,247,255,0.35)",
-                    border: "1px solid rgba(245,247,255,0.08)",
+                    background: "var(--disabled-bg)",
+                    color: "var(--disabled-text)",
+                    border: "1px solid var(--disabled-border)",
                   }}
                 >
                   Prossimamente
@@ -143,8 +147,7 @@ export default function SettingsPage() {
       {/* Notifiche */}
       <section className="glass rounded-2xl p-5 space-y-3">
         <h2
-          className="text-sm font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-sm font-semibold uppercase tracking-wider text-muted"
         >
           🔔 Notifiche
         </h2>
@@ -154,8 +157,7 @@ export default function SettingsPage() {
               Notifiche giornaliere
             </p>
             <p
-              className="text-xs mt-0.5"
-              style={{ color: "rgba(245,247,255,0.45)" }}
+              className="text-xs mt-0.5 text-muted"
             >
               Le notifiche push saranno disponibili in futuro
             </p>
@@ -171,8 +173,7 @@ export default function SettingsPage() {
       {/* Contenuto */}
       <section className="glass rounded-2xl p-5 space-y-3">
         <h2
-          className="text-sm font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-sm font-semibold uppercase tracking-wider text-muted"
         >
           ✨ Contenuto
         </h2>
@@ -201,7 +202,7 @@ export default function SettingsPage() {
       {/* Preferiti link */}
       <Link
         href="/favorites"
-        className="glass-interactive rounded-2xl p-5 flex items-center justify-between"
+        className="link-row"
       >
         <div className="flex items-center gap-3">
           <span className="text-xl">💜</span>
@@ -218,7 +219,7 @@ export default function SettingsPage() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="chevron-icon"
           aria-hidden
         >
           <polyline points="9 18 15 12 9 6" />
@@ -228,7 +229,7 @@ export default function SettingsPage() {
       {/* Privacy link */}
       <Link
         href="/privacy"
-        className="glass-interactive rounded-2xl p-5 flex items-center justify-between"
+        className="link-row"
       >
         <div className="flex items-center gap-3">
           <span className="text-xl">🔒</span>
@@ -245,7 +246,7 @@ export default function SettingsPage() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="chevron-icon"
           aria-hidden
         >
           <polyline points="9 18 15 12 9 6" />
@@ -255,24 +256,40 @@ export default function SettingsPage() {
       {/* Clear data */}
       <section className="glass rounded-2xl p-5 space-y-3">
         <h2
-          className="text-sm font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-sm font-semibold uppercase tracking-wider text-muted"
         >
           🗑️ Gestione dati
         </h2>
-        <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.55)" }}>
+        <p className="text-sm leading-relaxed text-soft">
           Cancella tutti i dati salvati localmente sul tuo dispositivo. Questa azione è
           irreversibile.
         </p>
         <button
           type="button"
-          onClick={handleClearData}
+          onClick={() => setShowConfirm(true)}
           className="btn-ghost"
-          style={{ color: "#f87171", borderColor: "rgba(248,113,113,0.3)" }}
+          style={{ color: "var(--red-text)", borderColor: "var(--red-border)" }}
         >
           Cancella tutti i dati
         </button>
       </section>
+
+      <ConfirmDialog
+        open={showConfirm}
+        title="Cancella tutti i dati"
+        message="Sei sicuro di voler cancellare tutti i dati locali? Questa azione è irreversibile."
+        danger={true}
+        confirmLabel="Cancella"
+        cancelLabel="Annulla"
+        onCancel={() => setShowConfirm(false)}
+        onConfirm={handleConfirmClear}
+      />
+
+      <Toast
+        message="Dati locali eliminati con successo."
+        visible={showToast}
+        onHide={() => setShowToast(false)}
+      />
     </main>
   );
 }

@@ -25,9 +25,9 @@ export interface UseMoodHistoryReturn {
   loadMore: () => void;
 }
 
-export function useMoodHistory(): UseMoodHistoryReturn {
+export function useMoodHistory(limit?: number): UseMoodHistoryReturn {
   const [logs, setLogs] = useState<MoodLog[]>([]);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [visibleCount, setVisibleCount] = useState(limit ?? PAGE_SIZE);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
