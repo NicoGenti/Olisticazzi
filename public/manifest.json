@@ -1,0 +1,38 @@
+{
+  "name": "Moonmood — Tracker Spirituale dell'Umore",
+  "short_name": "Moonmood",
+  "description": "Il tuo tracker spirituale dell'umore",
+  "start_url": "/Moonmood/",
+  "scope": "/Moonmood/",
+  "display": "standalone",
+  "theme_color": "#0a0a0f",
+  "background_color": "#0a0a0f",
+  "lang": "it",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/Moonmood/icons/icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Moonmood/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Moonmood/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Moonmood/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

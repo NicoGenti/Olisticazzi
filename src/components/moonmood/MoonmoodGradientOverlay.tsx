@@ -1,10 +1,15 @@
 "use client";
 
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 import { useMoodScore } from "@/hooks/useMoodStore";
 import { useGradientIntensity } from "@/context/GradientIntensityContext";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+// Secondary/utility routes that use lightweight gradient mode (fewer blobs, lower opacity)
+const LIGHT_MODE_ROUTES = ["/settings", "/privacy", "/favorites", "/report"];
 
 type Rgb = { r: number; g: number; b: number };
 
@@ -72,6 +77,11 @@ export function MoonmoodGradientOverlay({ intensity: intensityProp }: MoonmoodGr
   const moodScore = useMoodScore();
   const { intensity: contextIntensity } = useGradientIntensity();
   const intensity = intensityProp ?? contextIntensity;
+  const pathname = usePathname();
+  const reducedMotion = useReducedMotion();
+  const isLightMode = LIGHT_MODE_ROUTES.includes((pathname ?? "") as string);
+  const activeBlobs = isLightMode ? BLOB_DRIFT.slice(0, 2) : BLOB_DRIFT;
+  const blurClass = isLightMode ? "blur-2xl" : "blur-3xl";
   const moodMotion = useMotionValue(moodScore);
   const gradientBackground = useTransform(moodMotion, (value) => buildGradient(value));
 
@@ -96,30 +106,36 @@ export function MoonmoodGradientOverlay({ intensity: intensityProp }: MoonmoodGr
       }}
       aria-hidden="true"
     >
-      {BLOB_DRIFT.map((blob, index) => (
-        <motion.div
-          key={blob.duration}
-          className="absolute h-[62vmax] w-[62vmax] rounded-full blur-3xl"
-          style={{
-            left: `${lerpByMood(moodScore, 8 + index * 16, 14 + index * 18)}%`,
-            top: `${lerpByMood(moodScore, 12 + index * 14, 8 + index * 16)}%`,
-            opacity: lerpByMood(moodScore, 0.16, 0.42) * intensity,
-            background: `radial-gradient(circle at 40% 40%, ${blobColors[index]}99 0%, transparent 68%)`,
-            willChange: "transform"
-          }}
-          animate={{
-            x: blob.x,
-            y: blob.y,
-            scale: blob.scale
-          }}
-          transition={{
-            duration: blob.duration / intensity,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut"
-          }}
-        />
-      ))}
+      {!reducedMotion && activeBlobs.map((blob, index) => {
+        const baseOpacity = lerpByMood(moodScore, 0.16, 0.42) * intensity;
+        const opacity = isLightMode ? Math.min(baseOpacity, 0.25) : baseOpacity;
+        const transitionDuration = blob.duration / Math.max(0.1, intensity);
+
+        return (
+          <motion.div
+            key={index}
+            className={`absolute h-[62vmax] w-[62vmax] rounded-full ${blurClass}`}
+            style={{
+              left: `${lerpByMood(moodScore, 8 + index * 16, 14 + index * 18)}%`,
+              top: `${lerpByMood(moodScore, 12 + index * 14, 8 + index * 16)}%`,
+              opacity,
+              background: `radial-gradient(circle at 40% 40%, ${blobColors[index]}99 0%, transparent 68%)`,
+              willChange: "transform"
+            }}
+            animate={{
+              x: blob.x,
+              y: blob.y,
+              scale: blob.scale
+            }}
+            transition={{
+              duration: transitionDuration,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut"
+            }}
+          />
+        );
+      })}
     </motion.div>
   );
 }

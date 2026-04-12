@@ -2,35 +2,46 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface SettingsStoreState {
+  language: "it";
+  notificationsEnabled: boolean;
   sticazziEnabled: boolean;
+  ecoEnabled: boolean;
+  toggleNotifications: () => void;
   toggleSticazzi: () => void;
+  toggleEco: () => void;
 }
 
 const STORAGE_KEY = "moonmood_settings";
 
-/**
- * Custom storage that handles SSR cases where localStorage is unavailable.
- */
 const safeStorage = createJSONStorage(() => {
   if (typeof window === "undefined") {
-    // SSR: return a no-op storage
     return {
       getItem: () => null,
       setItem: () => {},
       removeItem: () => {},
     };
   }
-  // Client: use actual localStorage
   return localStorage;
 });
 
 export const useSettings = create<SettingsStoreState>()(
   persist(
     (set) => ({
+      language: "it" as const,
+      notificationsEnabled: false,
       sticazziEnabled: true,
+      ecoEnabled: true,
+      toggleNotifications: () =>
+        set((state) => ({
+          notificationsEnabled: !state.notificationsEnabled,
+        })),
       toggleSticazzi: () =>
         set((state) => ({
           sticazziEnabled: !state.sticazziEnabled,
+        })),
+      toggleEco: () =>
+        set((state) => ({
+          ecoEnabled: !state.ecoEnabled,
         })),
     }),
     {
@@ -42,3 +53,9 @@ export const useSettings = create<SettingsStoreState>()(
 
 export const useSticazziEnabled = () =>
   useSettings((state) => state.sticazziEnabled);
+
+export const useEcoEnabled = () =>
+  useSettings((state) => state.ecoEnabled);
+
+export const useNotificationsEnabled = () =>
+  useSettings((state) => state.notificationsEnabled);
