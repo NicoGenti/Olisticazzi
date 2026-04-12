@@ -4,10 +4,18 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import aphorisms from "@/data/aphorisms_seed.json";
 import { getDailyAphorism } from "@/services/aphorismSelector";
+import { useEcoEnabled } from "@/hooks/useSettings";
+import { useFavorite } from "@/hooks/useFavorite";
+import { FavoriteHeartIcon } from "@/components/layout/FavoriteHeartIcon";
 import type { AphorismEntry } from "@/types/oracle";
 
 export function EcoDelGiorno() {
+  const enabled = useEcoEnabled();
   const entry = getDailyAphorism(new Date(), aphorisms as AphorismEntry[]);
+  const { favorited, toggle, animating } = useFavorite(
+    "aphorism",
+    entry?.id ?? "",
+  );
   const [expanded, setExpanded] = useState(false);
   const [isTruncated, setIsTruncated] = useState(false);
   const textRef = useRef<HTMLParagraphElement>(null);
@@ -19,7 +27,12 @@ export function EcoDelGiorno() {
     }
   }, [entry?.text]);
 
-  if (!entry) return null;
+  if (!enabled || !entry) return null;
+
+  const handleFavoriteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggle();
+  };
 
   return (
     <button
@@ -35,16 +48,24 @@ export function EcoDelGiorno() {
       aria-expanded={isTruncated ? expanded : undefined}
       aria-label="Eco del Giorno — aforisma quotidiano"
     >
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-lg" aria-hidden>
-          🌿
-        </span>
-        <span
-          className="text-xs font-semibold uppercase tracking-[0.14em]"
-          style={{ color: "rgba(245,247,255,0.50)" }}
-        >
-          Eco del Giorno
-        </span>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-lg" aria-hidden>
+            🌿
+          </span>
+          <span
+            className="text-xs font-semibold uppercase tracking-[0.14em]"
+            style={{ color: "rgba(245,247,255,0.50)" }}
+          >
+            Eco del Giorno
+          </span>
+        </div>
+
+        <FavoriteHeartIcon
+          favorited={favorited}
+          animating={animating}
+          onToggle={handleFavoriteToggle}
+        />
       </div>
 
       <AnimatePresence mode="wait" initial={false}>
