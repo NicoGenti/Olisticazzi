@@ -11,6 +11,7 @@ import oracleCardsRaw from "@/data/oracle_seed.json";
 import remediesRaw from "@/data/remedies_seed.json";
 import type { OracleCard, Remedy } from "@/types/oracle";
 import type { MoonPhaseName } from "@/types/astrology";
+import { useFavorite } from "@/hooks/useFavorite";
 import {
   resolveOraclePageState,
   type OraclePageResolvedState,
@@ -54,6 +55,11 @@ export default function OraclePage() {
   const handleFlipComplete = useCallback(() => {
     setIsRemedyVisible(true);
   }, []);
+
+  const { favorited: oracleFavorited, toggle: toggleOracleFavorite, animating: oracleAnimating } = useFavorite(
+    "oracle",
+    pageState.status === "ready" ? pageState.card.id : "",
+  );
 
   useEffect(() => {
     void getTodayLog().then((log) => {
@@ -158,6 +164,9 @@ export default function OraclePage() {
             <OracleCardDisplay
               card={pageState.card}
               onFlipComplete={handleFlipComplete}
+              favorited={oracleFavorited}
+              onToggleFavorite={toggleOracleFavorite}
+              animatingFavorite={oracleAnimating}
             />
           </motion.div>
 
