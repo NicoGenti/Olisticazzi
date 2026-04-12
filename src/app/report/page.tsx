@@ -5,20 +5,8 @@ import { motion } from "framer-motion";
 import { getAllLogs } from "@/services/db";
 import { calculateMoodTrend } from "@/services/moodTrend";
 import { getMoodLevel } from "@/lib/moodConfig";
+import { staggerContainer, fadeUp } from "@/lib/animations";
 import type { MoodLog } from "@/types/mood";
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.04 },
-  },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.4, 0, 0.2, 1] as const } },
-};
 
 interface ReportData {
   totalLogs: number;
@@ -97,8 +85,7 @@ export default function ReportPage() {
       {/* Header */}
       <header className="text-center pb-2">
         <p
-          className="text-xs uppercase tracking-[0.18em]"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-xs uppercase tracking-[0.18em] text-muted"
         >
           Statistiche
         </p>
@@ -124,7 +111,7 @@ export default function ReportPage() {
           <p className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
             Nessun dato disponibile
           </p>
-          <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+          <p className="text-sm text-subtle">
             Inizia a registrare il tuo umore per vedere i tuoi trend qui.
           </p>
         </div>
@@ -200,8 +187,7 @@ export default function ReportPage() {
           <motion.div variants={fadeUp}>
             <div className="glass rounded-2xl p-4 space-y-2">
               <p
-                className="text-xs font-semibold uppercase tracking-wider"
-                style={{ color: "rgba(245,247,255,0.4)" }}
+                className="text-xs font-semibold uppercase tracking-wider text-muted"
               >
                 Legenda umore
               </p>
@@ -214,7 +200,7 @@ export default function ReportPage() {
                         className="inline-block h-2.5 w-2.5 rounded-full flex-shrink-0"
                         style={{ backgroundColor: level.color }}
                       />
-                      <span className="text-xs" style={{ color: "rgba(245,247,255,0.65)" }}>
+                      <span className="text-xs text-body">
                         {score} — {level.label}
                       </span>
                     </div>
@@ -245,7 +231,7 @@ function MetricCard({ label, value, icon, color }: MetricCardProps) {
       style={{ boxShadow: `0 0 18px ${color}18` }}
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs" style={{ color: "rgba(245,247,255,0.45)" }}>{label}</span>
+        <span className="text-xs text-muted">{label}</span>
         <span className="text-base">{icon}</span>
       </div>
       <p className="text-xl font-bold font-display" style={{ color }}>
@@ -260,7 +246,7 @@ function MetricCard({ label, value, icon, color }: MetricCardProps) {
 function MiniMoodChart({ logs }: { logs: MoodLog[] }) {
   if (logs.length === 0) {
     return (
-      <p className="text-sm text-center py-4" style={{ color: "rgba(245,247,255,0.4)" }}>
+      <p className="text-sm text-center py-4 text-muted">
         Nessun dato
       </p>
     );
@@ -325,16 +311,16 @@ function InsightCard({ report }: { report: ReportData }) {
     <div
       className="glass rounded-2xl p-5 flex gap-4"
       style={{
-        background: "linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(6,182,212,0.08) 100%)",
-        border: "1px solid rgba(139,92,246,0.24)",
+        background: "linear-gradient(135deg, var(--violet-bg) 0%, rgba(6,182,212,0.08) 100%)",
+        border: "1px solid var(--violet-glow)",
       }}
     >
       <span className="text-2xl flex-shrink-0">{icon}</span>
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: "rgba(245,247,255,0.4)" }}>
+        <p className="text-xs font-semibold uppercase tracking-wider mb-1 text-muted">
           Insight
         </p>
-        <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.75)" }}>
+        <p className="text-sm leading-relaxed text-light">
           {insight}
         </p>
       </div>

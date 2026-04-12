@@ -24,8 +24,7 @@ export function HistoryDetailView({ state, onBack }: HistoryDetailViewProps) {
         className="glass-elevated rounded-2xl p-5 space-y-2"
       >
         <p
-          className="text-xs uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-xs uppercase tracking-wider text-muted"
         >
           Memoria
         </p>
@@ -35,17 +34,12 @@ export function HistoryDetailView({ state, onBack }: HistoryDetailViewProps) {
         >
           {state.date}
         </h1>
-        <p className="text-sm" style={{ color: "rgba(245,247,255,0.6)" }}>
+        <p className="text-sm text-body">
           Umore: <strong>{state.moodScore}/10</strong>
         </p>
         {state.moonPhaseIt && (
           <div
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs"
-            style={{
-              background: "var(--glass-bg-soft)",
-              border: "1px solid var(--glass-border-soft)",
-              color: "rgba(245,247,255,0.55)",
-            }}
+            className="moon-pill"
           >
             🌙 {state.moonPhaseIt}
           </div>
@@ -55,9 +49,9 @@ export function HistoryDetailView({ state, onBack }: HistoryDetailViewProps) {
       {state.status === "partial" && (
         <section
           className="glass rounded-xl p-4"
-          style={{ borderColor: "rgba(249,115,22,0.3)", background: "rgba(249,115,22,0.08)" }}
+          style={{ borderColor: "var(--warning-border)", background: "var(--warning-bg)" }}
         >
-          <p className="text-sm" style={{ color: "rgba(245,247,255,0.7)" }}>
+          <p className="text-sm text-body">
             {state.fallbackMessageIt}
           </p>
         </section>
@@ -66,14 +60,13 @@ export function HistoryDetailView({ state, onBack }: HistoryDetailViewProps) {
       {/* Note */}
       <section className="glass-elevated rounded-2xl p-5 space-y-2">
         <h2
-          className="text-xs font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.45)" }}
+          className="text-xs font-semibold uppercase tracking-wider text-muted"
         >
           Nota
         </h2>
         <p
           className="text-sm leading-relaxed"
-          style={{ color: "rgba(245,247,255,0.82)" }}
+          style={{ color: "var(--text-light)" }}
         >
           {state.note || "Nessuna nota salvata per questa memoria."}
         </p>
@@ -82,22 +75,21 @@ export function HistoryDetailView({ state, onBack }: HistoryDetailViewProps) {
       {/* Oracle card */}
       <section className="glass-elevated rounded-2xl p-5 space-y-2">
         <h2
-          className="text-xs font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.45)" }}
+          className="text-xs font-semibold uppercase tracking-wider text-muted"
         >
           Carta oracolo
         </h2>
         {state.card ? (
           <>
-            <p className="text-base font-semibold" style={{ color: "rgba(245,247,255,0.9)" }}>
+            <p className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
               {state.card.name}
             </p>
-            <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.72)" }}>
+            <p className="text-sm leading-relaxed text-body">
               {state.card.description}
             </p>
           </>
         ) : (
-          <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+          <p className="text-sm text-subtle">
             Dettaglio carta non disponibile.
           </p>
         )}
@@ -106,17 +98,16 @@ export function HistoryDetailView({ state, onBack }: HistoryDetailViewProps) {
       {/* Remedy */}
       <section className="glass-elevated rounded-2xl p-5 space-y-2">
         <h2
-          className="text-xs font-semibold uppercase tracking-wider"
-          style={{ color: "rgba(245,247,255,0.45)" }}
+          className="text-xs font-semibold uppercase tracking-wider text-muted"
         >
           Rimedio
         </h2>
         {state.remedy ? (
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(245,247,255,0.82)" }}>
+          <p className="text-sm leading-relaxed" style={{ color: "var(--text-light)" }}>
             {state.remedy.text}
           </p>
         ) : (
-          <p className="text-sm" style={{ color: "rgba(245,247,255,0.5)" }}>
+          <p className="text-sm text-subtle">
             Dettaglio rimedio non disponibile.
           </p>
         )}

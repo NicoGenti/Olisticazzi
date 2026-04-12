@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAllFavorites } from "@/hooks/useAllFavorites";
 import { removeFavorite } from "@/services/db";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import oracleCards from "@/data/oracle_seed.json";
 import aphorisms from "@/data/aphorisms_seed.json";
 import sticazzi from "@/data/sticazzi_seed.json";
@@ -40,14 +41,7 @@ export default function FavoritesPage() {
   };
 
   if (loading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-3">
-        <span className="font-display text-2xl font-bold animate-pulse" style={{ color: "var(--accent-violet)" }}>
-          Moonmood
-        </span>
-        <span className="text-sm" style={{ color: "rgba(245,247,255,0.4)" }}>Caricamento...</span>
-      </main>
-    );
+    return <LoadingScreen />;
   }
 
   const hasFavorites = favorites.length > 0;
@@ -57,8 +51,7 @@ export default function FavoritesPage() {
       {/* Header */}
       <header className="text-center pb-2">
         <p
-          className="text-xs uppercase tracking-[0.18em]"
-          style={{ color: "rgba(245,247,255,0.4)" }}
+          className="text-xs uppercase tracking-[0.18em] text-muted"
         >
           I tuoi contenuti
         </p>
@@ -84,7 +77,7 @@ export default function FavoritesPage() {
               <p className="font-display text-lg font-bold" style={{ color: "var(--text-primary)" }}>
                 Nessun preferito ancora
               </p>
-              <p className="text-sm" style={{ color: "rgba(245,247,255,0.55)" }}>
+              <p className="text-sm text-soft">
                 Tocca il cuore ♡ sulle carte oracolo, aforismi e frasi sticazzi per salvarle qui.
               </p>
             </div>
@@ -115,17 +108,15 @@ export default function FavoritesPage() {
                 <div className="flex items-center gap-2">
                   <span className="text-lg" aria-hidden>{typeInfo.emoji}</span>
                   <h2
-                    className="text-sm font-semibold uppercase tracking-wider"
-                    style={{ color: "rgba(245,247,255,0.5)" }}
+                    className="text-sm font-semibold uppercase tracking-wider text-subtle"
                   >
                     {typeInfo.label}
                   </h2>
                   <span
-                    className="text-xs px-2 py-0.5 rounded-full"
+                    className="text-xs px-2 py-0.5 rounded-full text-muted"
                     style={{
                       background: "var(--glass-bg-soft)",
                       border: "1px solid var(--glass-border-soft)",
-                      color: "rgba(245,247,255,0.45)",
                     }}
                   >
                     {entries.length}
@@ -173,8 +164,7 @@ function FavoriteItem({ favorite, onRemove }: FavoriteItemProps) {
           </p>
         )}
         <p
-          className="text-sm leading-relaxed line-clamp-2"
-          style={{ color: "rgba(245,247,255,0.65)" }}
+          className="text-sm leading-relaxed line-clamp-2 text-body"
         >
           {content.text}
         </p>
@@ -184,9 +174,9 @@ function FavoriteItem({ favorite, onRemove }: FavoriteItemProps) {
         onClick={() => onRemove(favorite.type, favorite.contentId)}
         className="shrink-0 text-sm px-2 py-1 rounded-lg transition-colors"
         style={{
-          background: "rgba(248,113,113,0.12)",
-          border: "1px solid rgba(248,113,113,0.24)",
-          color: "#f87171",
+          background: "var(--red-bg)",
+          border: "1px solid var(--red-border)",
+          color: "var(--red-text)",
         }}
         aria-label="Rimuovi dai preferiti"
       >

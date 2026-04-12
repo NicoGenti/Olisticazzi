@@ -5,22 +5,11 @@ import Link from "next/link";
 import { useDailySession } from "@/hooks/useDailySession";
 import { useEcoEnabled } from "@/hooks/useSettings";
 import { getMoodLevel, getGreeting } from "@/lib/moodConfig";
+import { staggerContainer, fadeUp } from "@/lib/animations";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { MoodHistory } from "@/components/mood/MoodHistory";
 import { EcoDelGiorno } from "@/components/home/EcoDelGiorno";
 import { SticazziCard } from "@/components/home/SticazziCard";
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-  },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.4, 0, 0.2, 1] as const } },
-};
 
 export default function Home() {
   const { sessionState } = useDailySession();
@@ -30,21 +19,7 @@ export default function Home() {
   return (
     <AnimatePresence mode="wait">
       {/* Loading state */}
-      {sessionState.status === "loading" && (
-        <motion.main
-          key="loading"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex min-h-screen flex-col items-center justify-center gap-3"
-        >
-          <span className="font-display text-2xl font-bold animate-pulse" style={{ color: "var(--accent-violet)" }}>
-            Moonmood
-          </span>
-          <span className="text-sm" style={{ color: "rgba(245,247,255,0.4)" }}>Caricamento...</span>
-        </motion.main>
-      )}
+      {sessionState.status === "loading" && <LoadingScreen />}
 
       {/* Dashboard */}
       {(sessionState.status === "fresh" || sessionState.status === "saved" || sessionState.status === "editing") && (
@@ -58,7 +33,7 @@ export default function Home() {
         >
           {/* Hero branding */}
           <motion.header variants={fadeUp} className="text-center pt-2 pb-1">
-            <p className="text-xs font-medium uppercase tracking-[0.18em]" style={{ color: "rgba(245,247,255,0.4)" }}>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
               {greeting}
             </p>
             <h1
@@ -72,7 +47,7 @@ export default function Home() {
             >
               Moonmood
             </h1>
-            <p className="text-sm mt-1" style={{ color: "rgba(245,247,255,0.5)" }}>
+            <p className="text-sm mt-1 text-subtle">
               Il tuo tracker spirituale dell&apos;umore
             </p>
           </motion.header>
@@ -97,7 +72,7 @@ export default function Home() {
                     <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
                       Come stai oggi?
                     </p>
-                    <p className="text-xs mt-0.5" style={{ color: "rgba(245,247,255,0.5)" }}>
+                    <p className="text-xs mt-0.5 text-subtle">
                       Non hai ancora registrato il tuo umore
                     </p>
                   </div>
@@ -106,8 +81,8 @@ export default function Home() {
                     style={{
                       width: 44,
                       height: 44,
-                      background: "linear-gradient(135deg, rgba(139,92,246,0.3), rgba(6,182,212,0.2))",
-                      border: "1px solid rgba(139,92,246,0.35)",
+                      background: "var(--btn-gradient)",
+                      border: "1px solid var(--btn-border)",
                     }}
                   >
                     ✨
@@ -135,8 +110,8 @@ export default function Home() {
               <div
                 className="glass rounded-2xl p-5 flex items-center gap-4"
                 style={{
-                  background: "linear-gradient(135deg, rgba(139,92,246,0.18) 0%, rgba(6,182,212,0.12) 100%)",
-                  border: "1px solid rgba(139,92,246,0.28)",
+                  background: "linear-gradient(135deg, var(--violet-bg-strong) 0%, rgba(6,182,212,0.12) 100%)",
+                  border: "1px solid var(--violet-border)",
                 }}
               >
                 <span className="text-3xl">🌙</span>
@@ -144,7 +119,7 @@ export default function Home() {
                   <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
                     Oracolo del giorno
                   </p>
-                  <p className="text-xs mt-0.5" style={{ color: "rgba(245,247,255,0.5)" }}>
+                  <p className="text-xs mt-0.5 text-subtle">
                     {sessionState.status === "saved"
                       ? "La tua carta ti aspetta"
                       : "Registra l'umore per accedere"}
@@ -159,7 +134,7 @@ export default function Home() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  style={{ color: "rgba(245,247,255,0.4)", flexShrink: 0 }}
+                  className="chevron-icon"
                   aria-hidden
                 >
                   <polyline points="9 18 15 12 9 6" />
@@ -195,7 +170,7 @@ export default function Home() {
             >
               <span className="text-xl">📊</span>
               <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Report</p>
-              <p className="text-xs" style={{ color: "rgba(245,247,255,0.5)" }}>I tuoi trend</p>
+              <p className="text-xs text-subtle">I tuoi trend</p>
             </Link>
             <Link
               href="/oracle"
@@ -203,13 +178,13 @@ export default function Home() {
             >
               <span className="text-xl">🔮</span>
               <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Oracolo</p>
-              <p className="text-xs" style={{ color: "rgba(245,247,255,0.5)" }}>Messaggio del giorno</p>
+              <p className="text-xs text-subtle">Messaggio del giorno</p>
             </Link>
           </motion.div>
 
           {/* Footer disclaimer */}
           <motion.footer variants={fadeUp} className="text-center pt-2 pb-2">
-            <p className="text-xs" style={{ color: "rgba(245,247,255,0.28)" }}>
+            <p className="text-xs text-dim">
               Moonmood · Per uso personale e riflessivo
             </p>
           </motion.footer>
@@ -241,7 +216,7 @@ function DailyMoodCard({ moodScore, date, note }: DailyMoodCardProps) {
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs capitalize" style={{ color: "rgba(245,247,255,0.45)" }}>
+          <p className="text-xs capitalize text-muted">
             {formattedDate}
           </p>
           <p className="text-lg font-semibold mt-0.5" style={{ color: "var(--text-primary)" }}>
@@ -265,8 +240,7 @@ function DailyMoodCard({ moodScore, date, note }: DailyMoodCardProps) {
 
       {note && (
         <p
-          className="text-sm leading-relaxed line-clamp-2"
-          style={{ color: "rgba(245,247,255,0.65)" }}
+          className="text-sm leading-relaxed line-clamp-2 text-body"
         >
           {note}
         </p>
@@ -282,15 +256,8 @@ function DailyMoodCard({ moodScore, date, note }: DailyMoodCardProps) {
         </Link>
         <Link
           href="/oracle"
-          className="text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
-          style={{
-            background: "linear-gradient(135deg, rgba(139,92,246,0.28), rgba(6,182,212,0.18))",
-            border: "1px solid rgba(139,92,246,0.35)",
-            color: "var(--text-primary)",
-            minHeight: 32,
-            display: "inline-flex",
-            alignItems: "center",
-          }}
+          className="btn-gradient text-xs px-3 py-1.5"
+          style={{ minHeight: 32 }}
         >
           Vedi oracolo →
         </Link>
