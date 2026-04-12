@@ -3,6 +3,7 @@ import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { MoonmoodGradientOverlay } from "@/components/moonmood/MoonmoodGradientOverlay";
 import { GradientIntensityProvider } from "@/context/GradientIntensityContext";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import "@/services/db";
 
 import "./globals.css";
@@ -28,13 +29,15 @@ export default function RootLayout({
       >
         <GradientIntensityProvider>
           <MoonmoodGradientOverlay />
-          {/* Page content — centered, max-width container with nav padding */}
-          <div
-            className="relative mx-auto w-full max-w-lg min-h-screen"
-            style={{ paddingBottom: "calc(var(--nav-height) + env(safe-area-inset-bottom, 0px))" }}
-          >
-            {children}
-          </div>
+          <ErrorBoundary>
+            {/* Page content — centered, max-width container with nav padding */}
+            <div
+              className="relative mx-auto w-full max-w-lg min-h-screen"
+              style={{ paddingBottom: "calc(var(--nav-height) + env(safe-area-inset-bottom, 0px))" }}
+            >
+              {children}
+            </div>
+          </ErrorBoundary>
           <BottomNav />
         </GradientIntensityProvider>
       </body>

@@ -133,6 +133,8 @@ export default function MoodPage() {
                 transition={{ duration: 0.18 }}
                 className="text-base font-semibold"
                 style={{ color: "var(--text-primary)" }}
+                aria-live="polite"
+                aria-atomic="true"
               >
                 {moodLevel.emoji} {moodLevel.label}
               </motion.p>

@@ -53,7 +53,7 @@ export default function Home() {
           </motion.header>
 
           {/* Daily status card */}
-          <motion.div variants={fadeUp}>
+          <motion.div variants={fadeUp} aria-live="polite" aria-atomic="true">
             {sessionState.status === "saved" || sessionState.status === "editing" ? (
               // Saved mood card
               <DailyMoodCard
