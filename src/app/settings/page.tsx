@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 
 import { clearAllLocalData } from "@/services/db";
 import { useSettings } from "@/hooks/useSettings";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { Toast } from "@/components/ui/Toast";
 
 const LANGUAGES = [
   { code: "it", label: "Italiano", available: true },
@@ -51,14 +53,13 @@ export default function SettingsPage() {
   const toggleEco = useSettings((state) => state.toggleEco);
   const toggleNotifications = useSettings((state) => state.toggleNotifications);
 
-  const handleClearData = useCallback(async () => {
-    const confirmed = window.confirm(
-      "Sei sicuro di voler cancellare tutti i dati locali? Questa azione è irreversibile."
-    );
-    if (!confirmed) return;
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
+  const handleConfirmClear = useCallback(async () => {
     await clearAllLocalData();
-    window.alert("Dati locali eliminati con successo.");
+    setShowConfirm(false);
+    setShowToast(true);
   }, []);
 
   return (
@@ -260,13 +261,30 @@ export default function SettingsPage() {
         </p>
         <button
           type="button"
-          onClick={handleClearData}
+          onClick={() => setShowConfirm(true)}
           className="btn-ghost"
           style={{ color: "var(--red-text)", borderColor: "var(--red-border)" }}
         >
           Cancella tutti i dati
         </button>
       </section>
+
+      <ConfirmDialog
+        open={showConfirm}
+        title="Cancella tutti i dati"
+        message="Sei sicuro di voler cancellare tutti i dati locali? Questa azione è irreversibile."
+        danger={true}
+        confirmLabel="Cancella"
+        cancelLabel="Annulla"
+        onCancel={() => setShowConfirm(false)}
+        onConfirm={handleConfirmClear}
+      />
+
+      <Toast
+        message="Dati locali eliminati con successo."
+        visible={showToast}
+        onHide={() => setShowToast(false)}
+      />
     </main>
   );
 }

@@ -37,8 +37,7 @@ describe("SettingsPage", () => {
     expect(link.getAttribute("href")).toBe("/privacy");
   });
 
-  it("asks confirmation before deleting", async () => {
-    const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
+  it("shows ConfirmDialog on delete button click", async () => {
     const user = userEvent.setup();
 
     render(<SettingsPage />);
@@ -46,8 +45,8 @@ describe("SettingsPage", () => {
     const button = screen.getByRole("button", { name: /cancella tutti i dati/i });
     await user.click(button);
 
-    expect(confirmSpy).toHaveBeenCalled();
-    confirmSpy.mockRestore();
+    // ConfirmDialog should now be open — look for its cancel button
+    expect(screen.getByRole("button", { name: /annulla/i })).toBeInTheDocument();
   });
 
   it("renders Lingua section with Italiano as active", () => {
