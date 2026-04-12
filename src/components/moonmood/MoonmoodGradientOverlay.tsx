@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useMoodScore } from "@/hooks/useMoodStore";
 import { useGradientIntensity } from "@/context/GradientIntensityContext";
 
+// Secondary/utility routes that use lightweight gradient mode (fewer blobs, lower opacity)
 const LIGHT_MODE_ROUTES = ["/settings", "/privacy", "/favorites", "/report"];
 
 type Rgb = { r: number; g: number; b: number };
@@ -76,7 +77,7 @@ export function MoonmoodGradientOverlay({ intensity: intensityProp }: MoonmoodGr
   const { intensity: contextIntensity } = useGradientIntensity();
   const intensity = intensityProp ?? contextIntensity;
   const pathname = usePathname();
-  const isLightMode = LIGHT_MODE_ROUTES.includes(pathname);
+  const isLightMode = LIGHT_MODE_ROUTES.includes((pathname ?? "") as string);
   const activeBlobs = isLightMode ? BLOB_DRIFT.slice(0, 2) : BLOB_DRIFT;
   const blurClass = isLightMode ? "blur-2xl" : "blur-3xl";
   const moodMotion = useMotionValue(moodScore);
@@ -110,7 +111,7 @@ export function MoonmoodGradientOverlay({ intensity: intensityProp }: MoonmoodGr
 
         return (
           <motion.div
-            key={blob.duration}
+            key={index}
             className={`absolute h-[62vmax] w-[62vmax] rounded-full ${blurClass}`}
             style={{
               left: `${lerpByMood(moodScore, 8 + index * 16, 14 + index * 18)}%`,
