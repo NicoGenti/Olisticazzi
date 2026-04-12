@@ -5,16 +5,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import sticazzi from "@/data/sticazzi_seed.json";
 import { getDailySticazzi } from "@/services/sticazziSelector";
 import { useSticazziEnabled } from "@/hooks/useSettings";
-import { isFavorite, addFavorite, removeFavorite } from "@/services/db";
+import { useFavorite } from "@/hooks/useFavorite";
+import { FavoriteHeartIcon } from "@/components/layout/FavoriteHeartIcon";
 import type { SticazziEntry } from "@/types/oracle";
 
 export function SticazziCard() {
   const enabled = useSticazziEnabled();
   const entry = getDailySticazzi(new Date(), sticazzi as SticazziEntry[]);
+  const { favorited, toggle, animating } = useFavorite(
+    "sticazzi",
+    entry?.id ?? "",
+  );
   const [expanded, setExpanded] = useState(false);
   const [isTruncated, setIsTruncated] = useState(false);
-  const [favorited, setFavorited] = useState(false);
-  const [animating, setAnimating] = useState(false);
   const textRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
@@ -24,24 +27,11 @@ export function SticazziCard() {
     }
   }, [entry?.text]);
 
-  useEffect(() => {
-    if (!entry) return;
-    isFavorite("sticazzi", entry.id).then(setFavorited);
-  }, [entry]);
-
   if (!enabled || !entry) return null;
 
-  const handleFavoriteToggle = async (e: React.MouseEvent) => {
+  const handleFavoriteToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setAnimating(true);
-    if (favorited) {
-      await removeFavorite("sticazzi", entry.id);
-      setFavorited(false);
-    } else {
-      await addFavorite("sticazzi", entry.id);
-      setFavorited(true);
-    }
-    setTimeout(() => setAnimating(false), 300);
+    toggle();
   };
 
   return (
@@ -71,24 +61,11 @@ export function SticazziCard() {
           </span>
         </div>
 
-        <motion.button
-          type="button"
-          onClick={handleFavoriteToggle}
-          animate={animating ? { scale: [1, 1.3, 1] } : { scale: 1 }}
-          transition={{ duration: 0.3 }}
-          aria-label={favorited ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
-          style={{
-            background: "none",
-            border: "none",
-            padding: "4px",
-            cursor: "pointer",
-            color: favorited ? "var(--accent-pink)" : "rgba(245,247,255,0.40)",
-            fontSize: "1.25rem",
-            lineHeight: 1,
-          }}
-        >
-          {favorited ? "♥" : "♡"}
-        </motion.button>
+        <FavoriteHeartIcon
+          favorited={favorited}
+          animating={animating}
+          onToggle={handleFavoriteToggle}
+        />
       </div>
 
       <AnimatePresence mode="wait" initial={false}>

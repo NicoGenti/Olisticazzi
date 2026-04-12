@@ -2,11 +2,15 @@
 
 import { motion } from "framer-motion";
 import { memo } from "react";
+import { FavoriteHeartIcon } from "@/components/layout/FavoriteHeartIcon";
 import type { OracleCard } from "@/types/oracle";
 
 interface OracleCardDisplayProps {
   card: OracleCard;
   onFlipComplete?: () => void;
+  favorited?: boolean;
+  onToggleFavorite?: (e: React.MouseEvent) => void;
+  animatingFavorite?: boolean;
 }
 
 /**
@@ -14,7 +18,7 @@ interface OracleCardDisplayProps {
  * Animates from face-down (rotateY 180) to face-up (rotateY 0) over 1.2s.
  * Uses Framer Motion for the Y-axis rotation, preserve-3d + backfaceVisibility for the flip effect.
  */
-function OracleCardDisplayBase({ card, onFlipComplete }: OracleCardDisplayProps) {
+function OracleCardDisplayBase({ card, onFlipComplete, favorited, onToggleFavorite, animatingFavorite }: OracleCardDisplayProps) {
   return (
     <div style={{ perspective: "1200px" }} className="flex items-center justify-center">
       <motion.div
@@ -87,6 +91,17 @@ function OracleCardDisplayBase({ card, onFlipComplete }: OracleCardDisplayProps)
             }}
           />
           <div className="w-full h-full flex flex-col p-6 gap-3 relative">
+            {/* Favorite heart — top right */}
+            {onToggleFavorite && (
+              <div className="absolute top-3 right-3 z-10">
+                <FavoriteHeartIcon
+                  favorited={favorited ?? false}
+                  animating={animatingFavorite ?? false}
+                  onToggle={onToggleFavorite}
+                />
+              </div>
+            )}
+
             {/* Card name */}
             <h2 className="font-display text-xl font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
               {card.name}

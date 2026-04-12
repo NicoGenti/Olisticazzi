@@ -49,6 +49,12 @@ const ArchiveIcon = () => (
   </svg>
 );
 
+const FavoritesIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+
 const SettingsIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
     <circle cx="12" cy="12" r="3" />
@@ -62,6 +68,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/oracle", label: "Oracolo", icon: <OracleIcon /> },
   { href: "/report", label: "Report", icon: <ReportIcon /> },
   { href: "/history", label: "Archivio", icon: <ArchiveIcon /> },
+  { href: "/favorites", label: "Preferiti", icon: <FavoritesIcon /> },
   { href: "/settings", label: "Impostazioni", icon: <SettingsIcon /> },
 ];
 
@@ -82,7 +89,7 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               aria-current={isActive ? "page" : undefined}
-              className="relative flex min-h-[44px] min-w-[52px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 transition-colors active:scale-95"
+              className="relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 transition-colors active:scale-95"
               style={{
                 color: isActive ? "var(--accent-violet)" : "rgba(245,247,255,0.45)",
                 transition: "color 0.18s, transform 0.1s",

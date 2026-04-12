@@ -198,6 +198,33 @@ export default function SettingsPage() {
         </div>
       </section>
 
+      {/* Preferiti link */}
+      <Link
+        href="/favorites"
+        className="glass-interactive rounded-2xl p-5 flex items-center justify-between"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-xl">💜</span>
+          <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+            Preferiti
+          </span>
+        </div>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ color: "rgba(245,247,255,0.4)" }}
+          aria-hidden
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </Link>
+
       {/* Privacy link */}
       <Link
         href="/privacy"
